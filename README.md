@@ -34,6 +34,13 @@ Jeu d'ambiance multijoueur sur navigateur, à la table d'Al Capone. Mobile d'abo
 - `js/ecrans/` : un fichier par écran
 - `js/ui/` : cloche, sonnette, assiette-chrono, carnet, cartes
 
+## Après une modification
+
+Lance `python3 outils/version.py` avant d'envoyer sur GitHub. Le script met à jour
+les numéros de version dans `index.html`, pour que les téléphones chargent bien la
+nouvelle version au lieu d'une copie gardée en mémoire. Sans lui, la mise à jour
+finit quand même par arriver, mais ça peut prendre du temps.
+
 ## Bon à savoir
 
 - Le téléphone de l'hôte fait le tirage et compte les points. S'il se déconnecte,

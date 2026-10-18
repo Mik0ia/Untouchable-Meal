@@ -188,7 +188,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     dernierSeq = seq;
     if (etat.cause !== "sonnette") return;
     const suisCapone = ctx.secret && ctx.secret.role === CAPONE;
-    if (REGLES.sonnetteSurTousLesTelephones || suisCapone) sonner();
+    if (suisCapone) sonner();
   }
 
   // ---------- Arbitrage ----------

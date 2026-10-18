@@ -1,50 +1,10 @@
 // La sonnette d'Al Capone : le dessin et le son.
 
-import { REGLES } from "../config/regles.js";
 import { h } from "./dom.js";
 
-// ---------- Son ----------
-let audio = null;
-let deverrouille = false;
-
-function obtenirAudio() {
-  if (!REGLES.sonSonnette) return null;
-  if (!audio) {
-    audio = new Audio(REGLES.sonSonnette);
-    audio.preload = "auto";
-  }
-  return audio;
-}
-
-/**
- * Les navigateurs mobiles bloquent le son tant que l'utilisateur n'a pas touché
- * l'écran. On "débloque" le son au premier toucher.
- */
-export function preparerSon() {
-  if (!REGLES.sonSonnette) return;
-  const debloquer = () => {
-    if (deverrouille) return;
-    deverrouille = true;
-    const a = obtenirAudio();
-    a.muted = true;
-    a.play().then(() => { a.pause(); a.currentTime = 0; a.muted = false; })
-      .catch(() => { a.muted = false; deverrouille = false; });
-  };
-  window.addEventListener("pointerdown", debloquer, { capture: true });
-  window.addEventListener("keydown", debloquer, { capture: true });
-}
-
-export function sonner() {
-  if (navigator.vibrate) navigator.vibrate(40);
-  const a = obtenirAudio();
-  if (!a) return;
-  try {
-    a.muted = false;
-    a.currentTime = 0;
-    const p = a.play();
-    if (p && p.catch) p.catch(() => {});
-  } catch (e) { /* son indisponible */ }
-}
+// La sonnette est silencieuse : seule l'animation montre qu'Al Capone a sonné.
+export function preparerSon() {}
+export function sonner() {}
 
 // ---------- Dessin ----------
 const SVG_SONNETTE = `

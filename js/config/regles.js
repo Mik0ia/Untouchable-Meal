@@ -32,15 +32,6 @@ export const REGLES = {
   // (évite de passer deux tours d'un coup par un double clic).
   delaiAvantSonnette: 3,
 
-  // Son de la sonnette : null = pas de son (seulement l'animation et une
-  // petite vibration sur le téléphone d'Al Capone).
-  // Pour remettre un son, indique un fichier, ex. "ressources/sons/ding.mp3".
-  sonSonnette: null,
-
-  // Si un son est défini : true = il sonne sur tous les téléphones,
-  // false = uniquement sur celui d'Al Capone.
-  sonnetteSurTousLesTelephones: false,
-
   // Longueur du code des tables (parties).
   longueurCode: 5
 };
