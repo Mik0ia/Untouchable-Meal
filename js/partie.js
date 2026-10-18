@@ -4,11 +4,11 @@
 
 import { REGLES } from "./config/regles.js";
 import { TEXTES } from "./data/textes.js";
-import { CAPONE } from "./data/roles.js";
+import { CAPONE, SERVEUR } from "./data/roles.js";
 import { r, set, update, remove, ecouter, lire, maintenant } from "./firebase.js";
 import { surveillerPresence, quitterPartie, memoriserPartie } from "./lobby.js";
 import {
-  majAnnonce, lancerPartie, rejouer, resoudreElimination, verifierReponses,
+  majAnnonce, lancerPartie, rejouer, resoudreElimination, verifierReponses, resoudreServeur,
   commencerTours, avancerTour
 } from "./arbitre.js";
 import { sonner } from "./ui/sonnette.js";
@@ -61,6 +61,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
       avancerTour(pid, tour, "sonnette");
     },
     eliminer: (cible) => set(r(`${base}/actions/elimination`), { cible, par: uid }),
+    choisirServeur: (tour, cible) => set(r(`${base}/actions/serveur/${tour}`), cible),
     repondre: (mots) => set(r(`${base}/reponses/${uid}`), { mots }),
     rejouer: () => rejouer(pid, ctx.info, ctx.joueurs, ctx.etat),
     chargerSolution: async () => {
@@ -74,13 +75,14 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
   };
 
   // ---------- Écoute de la base ----------
-  const suivre = (chemin, cle) => abonnements.push(ecouter(chemin, (val) => { ctx[cle] = val; planifier(); }));
+  const suivre = (chemin, cle, surErreur) =>
+    abonnements.push(ecouter(chemin, (val) => { ctx[cle] = val; planifier(); }, surErreur));
   suivre(`${base}/info`, "info");
   suivre(`${base}/joueurs`, "joueurs");
   suivre(`${base}/etat`, "etat");
   suivre(`${base}/secrets/${uid}`, "secret");
   suivre(`${base}/resultats`, "resultats");
-  suivre(`${base}/actions`, "actions");
+  suivre(`${base}/actions/elimination`, "actionElimination");
   suivre(`${base}/reponses/${uid}`, "maReponse");
 
   function suivreCommeHote() {
@@ -88,6 +90,15 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     abonnementsHote = true;
     suivre(`${base}/solution`, "solutionHote");
     suivre(`${base}/reponses`, "reponsesHote");
+    suivreChoixServeur();
+  }
+
+  // Les choix du serveur ne sont lisibles que par l'hôte et le serveur.
+  let abonnementServeur = false;
+  function suivreChoixServeur() {
+    if (abonnementServeur) return;
+    abonnementServeur = true;
+    suivre(`${base}/actions/serveur`, "choixServeur", () => { abonnementServeur = false; });
   }
 
   // Regroupe les mises à jour rapprochées en un seul rendu.
@@ -131,7 +142,9 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     if (!joueurs || !joueurs[uid]) return partir("Tu n'es plus à cette table.");
 
     ctx.estHote = info.hote === uid;
+    ctx.uidCapone = etat.capone || null;
     if (ctx.estHote) suivreCommeHote();
+    if (ctx.secret && ctx.secret.role === SERVEUR) suivreChoixServeur();
 
     const phase = etat.phase;
     // En jeu, il faut connaître son rôle avant d'afficher quoi que ce soit.
@@ -212,8 +225,12 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     }
 
     const solution = ctx.solutionHote;
-    if (phase === "elimination" && solution && ctx.actions && ctx.actions.elimination && !etat.elimination) {
-      uneFois(`elim:${manche}`, () => resoudreElimination(pid, etat, solution, ctx.actions.elimination, joueurs));
+    if (phase === "tour" && solution && ctx.choixServeur) {
+      const cle = `serv:${manche}:${JSON.stringify(ctx.choixServeur)}`;
+      uneFois(cle, () => resoudreServeur(pid, solution, ctx.choixServeur, joueurs));
+    }
+    if (phase === "elimination" && solution && ctx.actionElimination && !etat.elimination) {
+      uneFois(`elim:${manche}`, () => resoudreElimination(pid, etat, solution, ctx.actionElimination, joueurs));
     }
     if (phase === "reponses" && solution && ctx.reponsesHote) {
       const cle = `rep:${manche}:${Object.keys(ctx.reponsesHote).sort().join(",")}`;

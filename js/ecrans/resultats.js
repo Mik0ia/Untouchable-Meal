@@ -3,7 +3,7 @@
 import { h, vider, avatar } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
-import { ROLES, CAPONE, POLICIER, TRAITRE } from "../data/roles.js";
+import { ROLES, CAPONE, POLICIER, TRAITRE, SERVEUR } from "../data/roles.js";
 import { listeJoueurs } from "./commun.js";
 import { bandeauElimination } from "./reponses.js";
 import { JOURNAUX } from "../data/visuels.js";
@@ -63,6 +63,9 @@ function construire(ctx, res, solution, reponses) {
   const repCapone = (reponses[uidDe(CAPONE)] || {}).mots || [];
   const repPolicier = (reponses[uidDe(POLICIER)] || {}).mots || [];
   const avecReponses = res.raison !== "policierElimine";
+  const aUnServeur = Object.values(roles).includes(SERVEUR);
+  const choixServeur = solution.serveur || {};
+  const nomDe = (u) => (ctx.joueurs[u] && ctx.joueurs[u].nom) || "?";
 
   const marque = (ok) => h("span", { class: ok ? "juste" : "faux", "aria-label": ok ? "juste" : "faux" }, ok ? "✓" : "✗");
   const reponse = (texte, ok, traitre) =>
@@ -73,6 +76,8 @@ function construire(ctx, res, solution, reponses) {
     h("dl", {},
       h("dt", {}, "Mot des acolytes"), h("dd", { class: "mot-revele" }, solution.motsAcolytes[i]),
       res.aDesTraitres ? [h("dt", {}, "Mot des traîtres"), h("dd", {}, solution.motsTraitres[i])] : null,
+      aUnServeur ? [h("dt", {}, "Le serveur a regardé"),
+        h("dd", {}, choixServeur[i] ? `chez ${nomDe(choixServeur[i])}` : "personne")] : null,
       avecReponses ? [
         h("dt", {}, "Al Capone a écrit"),
         h("dd", {}, reponse(repCapone[i], res.detail.capone[i], res.detail.traitresDansCapone[i])),

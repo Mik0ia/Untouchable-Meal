@@ -5,7 +5,7 @@
 //   une "transaction" garantit qu'elles ne s'appliquent qu'une fois.
 
 import { REGLES } from "./config/regles.js";
-import { POLICIER, CAPONE } from "./data/roles.js";
+import { POLICIER, CAPONE, TRAITRE, SERVEUR } from "./data/roles.js";
 import { preparerPartie } from "./tirage.js";
 import { calculerResultats } from "./scores.js";
 import { r, update, set, runTransaction, maintenant, onDisconnect, serverTimestamp } from "./firebase.js";
@@ -40,7 +40,9 @@ export async function lancerPartie(pid, info, joueurs, etat) {
     [`parties/${pid}/reponses`]: null,
     [`parties/${pid}/resultats`]: null,
     [`parties/${pid}/etat`]: {
-      phase: "cartes", seq: (etat.seq || 0) + 1, manche: etat.manche || 1, nbJoueurs: uids.length
+      phase: "cartes", seq: (etat.seq || 0) + 1, manche: etat.manche || 1, nbJoueurs: uids.length,
+      // Al Capone est connu de toute la table (ses acolytes doivent lui parler).
+      capone: Object.keys(solution.roles).find((u) => solution.roles[u] === CAPONE)
     }
   };
   if (!info.privee) maj[`annonces/${pid}`] = null;
@@ -98,6 +100,32 @@ export async function verifierReponses(pid, etat, solution, reponses) {
     [`parties/${pid}/resultats`]: resultats,
     [`parties/${pid}/etat`]: { ...etat, phase: "resultats", seq: (etat.seq || 0) + 1 }
   });
+}
+
+/**
+ * Le serveur a choisi chez qui regarder : l'hôte lui envoie ce qu'il découvre.
+ * @param {Object} choix  { [tour]: uidCible }
+ */
+export async function resoudreServeur(pid, solution, choix, joueurs) {
+  const roles = solution.roles || {};
+  const uidServeur = Object.keys(roles).find((u) => roles[u] === SERVEUR);
+  if (!uidServeur || !choix) return;
+  const deja = solution.serveur || {};
+  const maj = {};
+  for (const [t, cible] of Object.entries(choix)) {
+    if (cible === null || cible === undefined) continue;
+    if (deja[t] !== undefined && deja[t] !== null) continue;
+    const i = Number(t);
+    const role = roles[cible];
+    if (!role || role === CAPONE || cible === uidServeur) continue;
+    const vu = role === POLICIER
+      ? { type: "categorie", valeur: solution.categories[i] }
+      : { type: "mot", valeur: role === TRAITRE ? solution.motsTraitres[i] : solution.motsAcolytes[i] };
+    vu.nom = (joueurs[cible] && joueurs[cible].nom) || "?";
+    maj[`parties/${pid}/secrets/${uidServeur}/vus/${t}`] = vu;
+    maj[`parties/${pid}/solution/serveur/${t}`] = cible;
+  }
+  if (Object.keys(maj).length) await update(r(""), maj);
 }
 
 // ---------- Tout joueur : transitions ----------

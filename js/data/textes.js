@@ -60,6 +60,14 @@ export const TEXTES = {
   carnet: "Carnet",
   carnetAide: "Tes notes restent sur ton téléphone.",
 
+  // Serveur
+  serveurChoix: "Chez qui jettes-tu un œil pour ce plat ?",
+  serveurPlateau: "Choisis un convive",
+  serveurRegarder: (nom) => `Regarder chez ${nom}`,
+  serveurAttente: "Tu t'approches discrètement…",
+  serveurMotDe: (nom) => `Mot de ${nom}`,
+  serveurCategorie: "La catégorie est :",
+
   // Élimination
   eliminationTitre: "L'heure des comptes",
   eliminationCapone: "Choisis qui quitte la table. Si c'est le policier, tu gagnes sur-le-champ.",
@@ -81,7 +89,7 @@ export const TEXTES = {
 
   // Résultats
   victoireCapone: "Al Capone et ses acolytes l'emportent",
-  victoirePolicier: "Le policier l'emporte",
+  victoirePolicier: "La police l'emporte",
   victoireTraitres: "Les traîtres l'emportent",
   raisonPolicierElimine: "Le policier a été démasqué et éliminé.",
   rejouer: "Rejouer avec cette table",

@@ -1,7 +1,7 @@
 // Calcul des scores et du vainqueur. Fonctions pures, sans Firebase.
 
 import { REGLES } from "./config/regles.js";
-import { CAPONE, ACOLYTE, POLICIER, TRAITRE } from "./data/roles.js";
+import { CAPONE, ACOLYTE, POLICIER, TRAITRE, SERVEUR } from "./data/roles.js";
 
 /** "Calèche " -> "caleche" ; "Œuf" -> "oeuf". */
 export function normaliser(texte) {
@@ -92,7 +92,7 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
   // Liste des joueurs gagnants (un traître éliminé ne peut pas gagner).
   const camp = {
     [CAPONE]: [CAPONE, ACOLYTE],
-    [POLICIER]: [POLICIER],
+    [POLICIER]: [POLICIER, SERVEUR],
     [TRAITRE]: [TRAITRE]
   }[gagnant];
   const gagnants = Object.keys(roles).filter((u) =>

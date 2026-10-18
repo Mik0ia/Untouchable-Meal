@@ -49,10 +49,11 @@ export function deconnexion() {
 export const r = (chemin) => (chemin ? ref(db, chemin) : ref(db));
 
 /** Écoute un chemin. Retourne la fonction pour arrêter d'écouter. */
-export function ecouter(chemin, rappel) {
+export function ecouter(chemin, rappel, surErreur) {
   return onValue(r(chemin), (snap) => rappel(snap.val()), (err) => {
     console.warn("Lecture refusée :", chemin, err && err.message);
     rappel(null);
+    if (surErreur) surErreur(err);
   });
 }
 

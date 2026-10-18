@@ -6,6 +6,7 @@ export const CAPONE = "capone";
 export const ACOLYTE = "acolyte";
 export const POLICIER = "policier";
 export const TRAITRE = "traitre";
+export const SERVEUR = "serveur";
 
 // Description de chaque rôle : nom affiché, image de la carte, objectif.
 export const ROLES = {
@@ -38,6 +39,15 @@ export const ROLES = {
       "Ton mot est de la même catégorie que celui des acolytes. Glisse-le dans la " +
       "conversation : chaque fois qu'Al Capone ou le policier l'écrit, tu marques " +
       "un point. Plus de points qu'eux, et tu gagnes seul."
+  },
+  [SERVEUR]: {
+    nom: "Serveur",
+    carte: "ressources/cartes/serveur.webp",
+    objectif:
+      "Tu es dans l'équipe du policier. À chaque plat, choisis discrètement un " +
+      "convive (sauf Al Capone) et découvre son mot, ou la catégorie si c'est le " +
+      "policier. Tu n'écris rien à la fin : aide le policier à trouver les mots, " +
+      "tu gagnes avec lui."
   }
 };
 
@@ -52,7 +62,7 @@ export const COMPOSITIONS = {
   5:  [ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE],
   6:  [ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE],
   7:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE],
-  8:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE],
-  9:  [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE],
-  10: [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE, TRAITRE]
+  8:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, SERVEUR, TRAITRE, TRAITRE],
+  9:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, SERVEUR, TRAITRE, TRAITRE, TRAITRE],
+  10: [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, SERVEUR, TRAITRE, TRAITRE, TRAITRE]
 };
