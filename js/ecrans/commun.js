@@ -17,7 +17,7 @@ export function barreJeu(ctx) {
     h("span", { class: "barre-table" }, ctx.info.nom),
     h("button", {
       class: "btn-ma-carte", type: "button",
-      onclick: () => ctx.secret && ouvrirMaCarte(ctx.secret.role)
+      onclick: () => ctx.secret && ouvrirMaCarte(ctx.secret.role, ctx.etat.nbJoueurs || Object.keys(ctx.joueurs || {}).length)
     }, TEXTES.maCarte)
   );
 }

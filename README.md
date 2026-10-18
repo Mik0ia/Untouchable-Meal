@@ -20,7 +20,8 @@ Jeu d'ambiance multijoueur sur navigateur, à la table d'Al Capone. Mobile d'abo
 | `js/config/firebase-config.js` | Clés du projet Firebase |
 | `css/base.css` | Couleurs et polices (variables en haut du fichier) |
 | `ressources/cartes/` | Images des cartes utilisées par le site (versions légères) |
-| `ressources/sons/sonnette.mp3` | Son de la sonnette |
+| `js/data/visuels.js` | Logo, unes de journal (victoire), carte « exécuté » |
+| `ressources/journaux/`, `ressources/logo.webp` | Versions légères des unes et du logo |
 | `ASSETS/` | Cartes originales en haute définition |
 
 ## Organisation du code

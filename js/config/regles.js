@@ -32,12 +32,14 @@ export const REGLES = {
   // (évite de passer deux tours d'un coup par un double clic).
   delaiAvantSonnette: 3,
 
-  // true : la sonnette sonne sur le téléphone de tous les joueurs.
-  // false : uniquement sur celui d'Al Capone.
-  sonnetteSurTousLesTelephones: true,
+  // Son de la sonnette : null = pas de son (seulement l'animation et une
+  // petite vibration sur le téléphone d'Al Capone).
+  // Pour remettre un son, indique un fichier, ex. "ressources/sons/ding.mp3".
+  sonSonnette: null,
 
-  // Fichier du son de la sonnette (remplaçable par ton propre son).
-  sonSonnette: "ressources/sons/sonnette.mp3",
+  // Si un son est défini : true = il sonne sur tous les téléphones,
+  // false = uniquement sur celui d'Al Capone.
+  sonnetteSurTousLesTelephones: false,
 
   // Longueur du code des tables (parties).
   longueurCode: 5

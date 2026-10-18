@@ -8,6 +8,7 @@ let audio = null;
 let deverrouille = false;
 
 function obtenirAudio() {
+  if (!REGLES.sonSonnette) return null;
   if (!audio) {
     audio = new Audio(REGLES.sonSonnette);
     audio.preload = "auto";
@@ -20,6 +21,7 @@ function obtenirAudio() {
  * l'écran. On "débloque" le son au premier toucher.
  */
 export function preparerSon() {
+  if (!REGLES.sonSonnette) return;
   const debloquer = () => {
     if (deverrouille) return;
     deverrouille = true;
@@ -33,14 +35,15 @@ export function preparerSon() {
 }
 
 export function sonner() {
+  if (navigator.vibrate) navigator.vibrate(40);
   const a = obtenirAudio();
+  if (!a) return;
   try {
     a.muted = false;
     a.currentTime = 0;
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
   } catch (e) { /* son indisponible */ }
-  if (navigator.vibrate) navigator.vibrate(60);
 }
 
 // ---------- Dessin ----------

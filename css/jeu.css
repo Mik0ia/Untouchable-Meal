@@ -100,6 +100,28 @@
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
 }
 .fenetre .btn { width: auto; min-width: 9rem; }
+.fenetre-fond { overflow-y: auto; align-items: flex-start; }
+.fenetre { margin: auto 0; }
+.fenetre-actions { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; width: 100%; }
+.fenetre-actions .btn { width: 100%; }
+
+.fenetre-roles { padding: 0.5rem 0 1rem; }
+.liste-roles { list-style: none; margin: 0; padding: 0; width: 100%; text-align: left; }
+.liste-roles li {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 0.9rem;
+  align-items: start;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(239, 227, 200, 0.12);
+}
+.liste-roles img { width: 100%; border-radius: 5px; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4); }
+.liste-roles h3 { font-size: 1.1rem; margin-bottom: 0.2rem; }
+.liste-roles h3 small { font-family: var(--police-texte); font-size: 0.95rem; color: var(--creme-voile); }
+.liste-roles h3 .toi { font-style: italic; }
+.liste-roles p { font-size: 0.98rem; line-height: 1.45; color: var(--creme-voile); }
+.liste-roles li.moi p { color: var(--creme); }
+.liste-roles li.absent { opacity: 0.45; }
 
 /* ---------- Tour : en-tête façon menu ---------- */
 .ecran-tour { gap: 0.6rem; }

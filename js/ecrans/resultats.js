@@ -6,6 +6,7 @@ import { REGLES } from "../config/regles.js";
 import { ROLES, CAPONE, POLICIER, TRAITRE } from "../data/roles.js";
 import { listeJoueurs } from "./commun.js";
 import { bandeauElimination } from "./reponses.js";
+import { JOURNAUX } from "../data/visuels.js";
 
 const TITRES = {
   [CAPONE]: TEXTES.victoireCapone,
@@ -18,9 +19,15 @@ export function ecranResultats(ctx) {
   const gagne = res.gagnants.includes(ctx.uid);
   const corps = h("div", { class: "corps-resultats" }, h("p", { class: "attente" }, "On rallume la lumière…"));
 
+  // La une du journal du camp gagnant ; on la touche pour l'agrandir.
+  const journal = h("button", { class: "journal", type: "button", "aria-label": "Agrandir le journal" },
+    h("img", { src: JOURNAUX[res.gagnant], alt: TITRES[res.gagnant] }));
+  journal.addEventListener("click", () => agrandir(JOURNAUX[res.gagnant], TITRES[res.gagnant]));
+
   const el = h("main", { class: `ecran ecran-resultats victoire-${res.gagnant}` },
-    h("p", { class: "surtitre" }, gagne ? "Tu as gagné" : "Tu as perdu"),
-    h("h1", { class: "titre titre-victoire" }, TITRES[res.gagnant]),
+    h("h1", { class: "invisible" }, TITRES[res.gagnant]),
+    journal,
+    h("p", { class: `verdict ${gagne ? "verdict-gagne" : ""}` }, gagne ? "Tu as gagné" : "Tu as perdu"),
     res.raison === "policierElimine" ? h("p", { class: "aide" }, TEXTES.raisonPolicierElimine) : null,
     bandeauElimination(ctx.etat),
     corps,
@@ -38,6 +45,16 @@ export function ecranResultats(ctx) {
   });
 
   return { el };
+}
+
+function agrandir(src, alt) {
+  const fermer = () => fond.remove();
+  const fond = h("div", { class: "fenetre-fond journal-plein", role: "dialog", "aria-modal": "true", onclick: fermer },
+    h("img", { src, alt }),
+    h("button", { class: "btn btn-discret", type: "button" }, "Fermer")
+  );
+  document.body.append(fond);
+  fond.querySelector("button").focus();
 }
 
 function construire(ctx, res, solution, reponses) {

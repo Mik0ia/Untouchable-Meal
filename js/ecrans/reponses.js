@@ -5,6 +5,7 @@ import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
 import { CAPONE, POLICIER } from "../data/roles.js";
 import { barreJeu, avertissementHote } from "./commun.js";
+import { CARTE_EXECUTE } from "../data/visuels.js";
 
 export function bandeauElimination(etat) {
   const e = etat.elimination;
@@ -21,9 +22,14 @@ export function ecranReponses(ctx) {
   const zoneAvert = h("div");
   const zone = h("div", { class: "zone-reponses" });
 
+  const execute = ctx.etat.elimination && ctx.etat.elimination.cible === ctx.uid;
   const el = h("main", { class: "ecran ecran-reponses" },
     barreJeu(ctx),
-    bandeauElimination(ctx.etat),
+    execute
+      ? h("div", { class: "execute" },
+          h("img", { src: CARTE_EXECUTE, alt: "Participant exécuté" }),
+          h("p", { class: "aide" }, TEXTES.toiExecute))
+      : bandeauElimination(ctx.etat),
     h("h1", { class: "titre" }, TEXTES.reponsesTitre),
     zone,
     zoneAvert

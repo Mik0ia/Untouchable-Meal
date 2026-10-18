@@ -68,6 +68,7 @@ export const TEXTES = {
   etaitPolicier: (nom) => `${nom} était le policier.`,
   netaitPasPolicier: (nom) => `${nom} n'était pas le policier.`,
   personneElimine: "Al Capone a épargné tout le monde.",
+  toiExecute: "Al Capone t'a fait exécuter. Reste à table et savoure la suite.",
 
   // Réponses
   reponsesTitre: "Le mot de la fin",
