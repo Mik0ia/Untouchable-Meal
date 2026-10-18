@@ -3,25 +3,92 @@
 import { h } from "./dom.js";
 import { ROLES, DOS_DE_CARTE, COMPOSITIONS } from "../data/roles.js";
 
-/** Carte retournable. Retourne { el, retourner() }. */
+const mouvementReduit = () =>
+  window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
+ * Carte de rôle qui se retourne en 3D.
+ * Retourne { el, retourner(), cacher(), montrerDos() }.
+ *  - retourner() : dos -> face (on découvre son rôle)
+ *  - cacher()    : face -> dos, puis la face est retirée de la page
+ */
 export function creerCarteRetournable(role, surRetournee) {
   const info = ROLES[role];
-  const carte = h("button", { class: "carte", type: "button", "aria-label": "Retourner la carte" },
-    h("span", { class: "carte-interieur" },
-      h("img", { class: "carte-face carte-dos", src: DOS_DE_CARTE, alt: "Dos de carte", draggable: "false" }),
-      h("img", { class: "carte-face carte-recto", src: info.carte, alt: info.nom, draggable: "false" })
-    )
+  const recto = h("img", { class: "carte-face carte-recto", src: info.carte, alt: info.nom, draggable: "false" });
+  const interieur = h("div", { class: "carte-interieur" },
+    h("img", { class: "carte-face carte-dos", src: DOS_DE_CARTE, alt: "Dos de carte", draggable: "false" }),
+    recto
   );
-  let retournee = false;
-  const retourner = () => {
-    if (retournee) return;
-    retournee = true;
+  const carte = h("div", {
+    class: "carte", role: "button", tabindex: "0", "aria-label": "Retourner la carte"
+  }, h("div", { class: "carte-ombre", "aria-hidden": "true" }), interieur);
+
+  let face = false;      // la face est-elle visible ?
+  let verrouillee = false;
+  let enCours = null;
+
+  // Une rotation complète : la carte se soulève, tourne sur elle-même, se repose.
+  function animer(de, a) {
+    if (enCours) enCours.cancel();
+    const fin = `rotateY(${a}deg)`;
+    if (mouvementReduit()) {
+      interieur.style.transform = fin;
+      return Promise.resolve();
+    }
+    carte.classList.add("en-vol");
+    const milieu = (de + a) / 2;
+    enCours = interieur.animate([
+      { transform: `translateZ(0) rotateY(${de}deg) scale(1)` },
+      { transform: `translateZ(60px) translateY(-14px) rotateY(${milieu}deg) scale(1.1)`, offset: 0.5 },
+      { transform: `translateZ(0) rotateY(${a}deg) scale(1)` }
+    ], { duration: 950, easing: "cubic-bezier(0.45, 0.05, 0.25, 1)", fill: "forwards" });
+    return enCours.finished.then(() => {
+      interieur.style.transform = fin;
+      enCours.cancel();
+      enCours = null;
+      carte.classList.remove("en-vol");
+    }).catch(() => {});
+  }
+
+  function retourner() {
+    if (face || verrouillee) return;
+    face = true;
     carte.classList.add("retournee");
     carte.setAttribute("aria-label", info.nom);
+    animer(0, 180);
     if (surRetournee) surRetournee();
-  };
+  }
+
+  function cacher() {
+    if (!face) { montrerDos(); return Promise.resolve(); }
+    face = false;
+    verrouillee = true;
+    carte.classList.remove("retournee");
+    carte.classList.add("verrouillee");
+    carte.setAttribute("aria-label", "Carte retournée");
+    carte.removeAttribute("tabindex");
+    return animer(180, 360).then(() => {
+      interieur.style.transform = "rotateY(0deg)";
+      recto.remove(); // plus aucune trace du rôle à l'écran
+    });
+  }
+
+  // Dos visible, sans animation, carte non retournable.
+  function montrerDos() {
+    face = false;
+    verrouillee = true;
+    recto.remove();
+    interieur.style.transform = "rotateY(0deg)";
+    carte.classList.add("verrouillee");
+    carte.setAttribute("aria-label", "Carte retournée");
+    carte.removeAttribute("tabindex");
+  }
+
   carte.addEventListener("click", retourner);
-  return { el: carte, retourner };
+  carte.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); retourner(); }
+  });
+  return { el: carte, retourner, cacher, montrerDos };
 }
 
 /**

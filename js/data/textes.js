@@ -45,6 +45,7 @@ export const TEXTES = {
   // Cartes
   toucherCarte: "Touche la carte pour la retourner",
   pret: "Je suis prêt",
+  reposeTelephone: "Ta carte est retournée. Garde ton rôle pour toi, la partie commence quand tout le monde est prêt.",
   enAttente: (n, total) => `${n} sur ${total} sont prêts`,
   forcer: "Commencer sans attendre",
   maCarte: "Ma carte",

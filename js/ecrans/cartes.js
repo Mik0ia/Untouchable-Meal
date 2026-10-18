@@ -21,36 +21,57 @@ export function ecranCartes(ctx) {
   const zoneHote = h("div");
   const zoneAvert = h("div");
 
+  const repos = h("p", { class: "aide", hidden: true }, TEXTES.reposeTelephone);
+  const surtitre = h("p", { class: "surtitre" }, "Ton rôle");
+
   const carte = creerCarteRetournable(role, () => {
     consigne.hidden = true;
-    details.hidden = false;
-    if (!ctx.joueurs[ctx.uid] || !ctx.joueurs[ctx.uid].pret) boutonPret.hidden = false;
+    // Le texte apparaît quand la carte a fini de tourner.
+    setTimeout(() => {
+      if (pret) return;
+      details.hidden = false;
+      boutonPret.hidden = false;
+    }, 700);
   });
 
+  let pret = false;
+  // Prêt : on efface toute information sur le rôle et la carte se retourne.
+  function passerPret(anime) {
+    if (pret) return;
+    pret = true;
+    details.remove();
+    boutonPret.remove();
+    consigne.hidden = true;
+    surtitre.textContent = "Carte retournée";
+    repos.hidden = false;
+    if (anime) carte.cacher(); else carte.montrerDos();
+  }
+
   boutonPret.addEventListener("click", () => {
-    boutonPret.disabled = true;
+    passerPret(true);
     ctx.act.pret();
   });
 
   const el = h("main", { class: "ecran ecran-cartes" },
-    h("p", { class: "surtitre" }, "Ton rôle"),
+    surtitre,
     carte.el,
     consigne,
     details,
     boutonPret,
+    repos,
     statut,
     zoneHote,
     zoneAvert
   );
 
-  // Déjà prêt (page rechargée) : on montre directement la carte.
-  if (moi.pret) carte.retourner();
+  // Déjà prêt (page rechargée) : la carte reste face cachée.
+  if (moi.pret) passerPret(false);
 
   function maj(c) {
     const joueurs = listeJoueurs(c.joueurs);
     const prets = joueurs.filter((j) => j.pret).length;
     const jeSuisPret = !!(c.joueurs[c.uid] && c.joueurs[c.uid].pret);
-    if (jeSuisPret) boutonPret.hidden = true;
+    if (jeSuisPret) passerPret(true);
     statut.textContent = jeSuisPret ? TEXTES.enAttente(prets, joueurs.length) : "";
 
     vider(zoneHote);
