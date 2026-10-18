@@ -45,7 +45,8 @@ export function deconnexion() {
 
 // ---------- Raccourcis base de données ----------
 
-export const r = (chemin) => ref(db, chemin);
+// Un chemin vide désigne la racine de la base (pour les mises à jour multiples).
+export const r = (chemin) => (chemin ? ref(db, chemin) : ref(db));
 
 /** Écoute un chemin. Retourne la fonction pour arrêter d'écouter. */
 export function ecouter(chemin, rappel) {
