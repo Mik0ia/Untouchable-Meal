@@ -1,0 +1,75 @@
+{
+  "rules": {
+    "annonces": {
+      ".read": "auth != null",
+      "$pid": {
+        ".write": "auth != null && (data.exists() ? data.child('hote').val() === auth.uid : (!newData.exists() || newData.child('hote').val() === auth.uid))"
+      }
+    },
+
+    "codes": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || root.child('parties').child(data.val()).child('info/hote').val() === auth.uid)",
+        ".validate": "newData.isString()"
+      }
+    },
+
+    "parties": {
+      "$pid": {
+        "info": {
+          ".read": "auth != null",
+          ".write": "auth != null && (data.exists() ? data.child('hote').val() === auth.uid : newData.child('hote').val() === auth.uid)"
+        },
+
+        "joueurs": {
+          ".read": "auth != null",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid",
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && (data.exists() || newData.parent().parent().child('etat/phase').val() === 'salon')"
+          }
+        },
+
+        "etat": {
+          ".read": "auth != null",
+          ".write": "auth != null && (root.child('parties/' + $pid + '/joueurs/' + auth.uid).exists() || newData.parent().child('info/hote').val() === auth.uid)"
+        },
+
+        "secrets": {
+          ".read": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid",
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid"
+          }
+        },
+
+        "solution": {
+          ".read": "auth != null && (root.child('parties/' + $pid + '/info/hote').val() === auth.uid || root.child('parties/' + $pid + '/etat/phase').val() === 'resultats')",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid"
+        },
+
+        "actions": {
+          ".read": "auth != null",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid",
+          "elimination": {
+            ".write": "auth != null && root.child('parties/' + $pid + '/secrets/' + auth.uid + '/role').val() === 'capone' && root.child('parties/' + $pid + '/etat/phase').val() === 'elimination'"
+          }
+        },
+
+        "reponses": {
+          ".read": "auth != null && (root.child('parties/' + $pid + '/info/hote').val() === auth.uid || root.child('parties/' + $pid + '/etat/phase').val() === 'resultats')",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid",
+          "$uid": {
+            ".read": "auth != null && auth.uid === $uid",
+            ".write": "auth != null && auth.uid === $uid && root.child('parties/' + $pid + '/etat/phase').val() === 'reponses' && (root.child('parties/' + $pid + '/secrets/' + auth.uid + '/role').val() === 'capone' || root.child('parties/' + $pid + '/secrets/' + auth.uid + '/role').val() === 'policier')"
+          }
+        },
+
+        "resultats": {
+          ".read": "auth != null",
+          ".write": "auth != null && root.child('parties/' + $pid + '/info/hote').val() === auth.uid"
+        }
+      }
+    }
+  }
+}

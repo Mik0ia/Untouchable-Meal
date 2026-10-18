@@ -1,0 +1,260 @@
+/* =========================================================
+   Mise en page des écrans (connexion, accueil, salon, résultats…)
+   ========================================================= */
+
+.ecran {
+  width: 100%;
+  max-width: var(--largeur);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding:
+    calc(var(--marge) + env(safe-area-inset-top))
+    var(--marge)
+    calc(var(--marge) + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.9rem;
+}
+body.avec-carnet .ecran { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
+
+.titre { font-size: 1.85rem; letter-spacing: 0.02em; margin-top: 0.4rem; }
+.sous-titre { font-size: 1.15rem; margin-top: 1.5rem; }
+.surtitre { font-style: italic; color: var(--creme-voile); }
+.aide { color: var(--creme-voile); font-style: italic; max-width: 22rem; }
+.compteur { color: var(--creme-voile); }
+.attente {
+  margin: 2.5rem 0;
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--creme);
+  animation: respire 2.6s ease-in-out infinite;
+}
+@keyframes respire { 50% { opacity: 0.55; } }
+
+.actions { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; margin-top: 0.75rem; }
+
+.avertissement {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px dashed var(--rouge-alerte);
+  color: var(--rouge-alerte);
+  font-style: italic;
+}
+
+/* ---------- Chargement ---------- */
+.ecran-chargement { justify-content: center; }
+.chargement {
+  width: 2.5rem; height: 2.5rem;
+  border: 1px solid var(--creme-trait);
+  border-top-color: var(--creme);
+  border-radius: 50%;
+  animation: tourne 1s linear infinite;
+}
+@keyframes tourne { to { transform: rotate(360deg); } }
+
+/* ---------- Connexion : le carton d'invitation ---------- */
+.ecran-connexion { justify-content: center; }
+
+.invitation {
+  position: relative;
+  width: 100%;
+  padding: 2.75rem 1.25rem 2rem;
+  border: 1px solid var(--creme);
+  outline: 1px solid var(--creme-trait);
+  outline-offset: -9px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.invitation .lieu { font-style: italic; color: var(--creme-voile); }
+.titre-jeu {
+  font-size: clamp(1.9rem, 9.4vw, 2.9rem);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  font-weight: 400;
+}
+.titre-jeu.petit { font-size: 1.6rem; margin-top: 1rem; }
+.texte-invitation { max-width: 19rem; margin-bottom: 1.75rem; }
+
+/* ---------- Accueil ---------- */
+.ecran-accueil { justify-content: center; }
+.profil { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+.bonsoir { font-size: 1.35rem; font-style: italic; }
+.choix { display: flex; flex-direction: column; gap: 0.85rem; width: 100%; margin: 0.5rem 0 1.5rem; }
+
+/* ---------- Rejoindre ---------- */
+.liste-tables {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.liste-tables .vide { color: var(--creme-voile); font-style: italic; padding: 1rem 0; }
+.table {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0 1rem;
+  padding: 0.9rem 1rem;
+  text-align: left;
+  border: 1px solid var(--creme-trait);
+  border-radius: var(--rayon);
+  background: rgba(36, 6, 12, 0.35);
+  cursor: pointer;
+}
+.table:hover:not(:disabled) { border-color: var(--creme); }
+.table:disabled { opacity: 0.45; cursor: default; }
+.table-nom { font-family: var(--police-titre); font-size: 1.05rem; color: var(--creme-pale); }
+.table-hote { grid-column: 1; font-style: italic; color: var(--creme-voile); font-size: 0.95rem; }
+.table-places { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--creme-voile); white-space: nowrap; }
+
+.form-code { margin-top: 1.5rem; padding-top: 0.5rem; border-top: 1px solid var(--creme-trait); }
+.champ-code {
+  font-family: var(--police-titre) !important;
+  font-size: 1.6rem !important;
+  letter-spacing: 0.45em;
+  text-align: center;
+}
+.form-code .btn { margin-top: 1rem; }
+
+/* ---------- Salon ---------- */
+.code-table {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.code-table span {
+  width: 2.6rem;
+  height: 3.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--police-titre);
+  font-size: 1.6rem;
+  color: var(--bordeaux);
+  background: var(--creme-pale);
+  border-radius: 2px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.liste-convives {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+.liste-convives li {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 0.2rem;
+  border-bottom: 1px solid rgba(239, 227, 200, 0.12);
+}
+.liste-convives li.absent { opacity: 0.45; }
+.liste-convives .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.liste-convives .nom small { color: var(--creme-voile); font-style: italic; }
+.etiquette { font-style: italic; color: var(--creme-voile); font-size: 0.95rem; }
+.retirer {
+  width: 2.25rem; height: 2.25rem;
+  background: none;
+  border: 1px solid var(--creme-trait);
+  border-radius: 50%;
+  color: var(--creme-voile);
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.retirer:hover { color: var(--creme); border-color: var(--creme); }
+
+/* ---------- Création ---------- */
+.ecran-creer .titre, .ecran-rejoindre .titre { align-self: stretch; }
+
+/* ---------- Élimination ---------- */
+.contenu-elimination { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.9rem; }
+.choix-cible li { padding: 0; border: 0; }
+.cible {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom-color: rgba(239, 227, 200, 0.12);
+  text-align: left;
+  cursor: pointer;
+}
+.cible[aria-checked="true"] {
+  border-color: var(--creme);
+  background: rgba(239, 227, 200, 0.08);
+}
+.cible:disabled { opacity: 0.6; cursor: default; }
+
+/* ---------- Réponses ---------- */
+.bandeau {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--creme-trait);
+  border-bottom: 1px solid var(--creme-trait);
+  font-style: italic;
+  font-size: 1.15rem;
+}
+.bandeau-fort { color: var(--creme-pale); border-color: var(--creme); }
+.zone-reponses { width: 100%; }
+.menu-reponses label {
+  font-family: var(--police-titre);
+  font-style: normal;
+  color: var(--creme-pale);
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+}
+
+/* ---------- Résultats ---------- */
+.titre-victoire { font-size: 1.9rem; }
+.corps-resultats { width: 100%; }
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.25rem;
+}
+.scores div { display: flex; flex-direction: column; align-items: center; }
+.scores strong { font-family: var(--police-titre); font-size: 2.2rem; font-weight: 400; color: var(--creme-pale); line-height: 1.1; }
+.scores span { font-style: italic; color: var(--creme-voile); font-size: 0.95rem; }
+.scores .hors-jeu { opacity: 0.45; }
+.scores .hors-jeu strong { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+.plats { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+.plat { padding: 1rem 0; border-top: 1px solid var(--creme-trait); }
+.plat h3 { font-size: 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 0.1rem; }
+.plat h3 small { font-family: var(--police-texte); font-style: italic; font-size: 0.95rem; color: var(--creme-voile); }
+.plat dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0.75rem 0 0;
+  text-align: left;
+}
+.plat dt { color: var(--creme-voile); font-style: italic; }
+.plat dd { margin: 0; text-align: right; }
+.mot-revele { font-family: var(--police-titre); color: var(--creme-pale); }
+.reponse .juste { color: var(--creme-pale); }
+.reponse .faux { color: var(--rouge-alerte); }
+.legende { margin-top: 0.75rem; font-size: 0.92rem; font-style: italic; color: var(--creme-voile); }
+.reponse.piege { text-decoration: underline wavy var(--rouge-alerte); text-underline-offset: 0.3em; }
+
+.roles-reveles li.gagnant .nom { color: var(--creme-pale); }
+.roles-reveles li.gagnant .avatar { border-color: var(--creme); box-shadow: 0 0 0 3px rgba(239, 227, 200, 0.18); }
+.roles-reveles li:not(.gagnant) { opacity: 0.7; }
