@@ -2,17 +2,27 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
   <meta name="theme-color" content="#3a0b14">
   <meta name="description" content="Untouchable Meal : jeu d'ambiance à la table d'Al Capone.">
   <title>Untouchable Meal</title>
   <link rel="icon" href="ressources/icone.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="ressources/icones/icone-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Untouchable">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap">
   <link rel="stylesheet" href="css/base.css?v=cf892260">
   <link rel="stylesheet" href="css/ecrans.css?v=da23d8da">
-  <link rel="stylesheet" href="css/jeu.css?v=c183e0f8">
+  <link rel="stylesheet" href="css/jeu.css?v=fb2738bf">
+  <script>
+    // Rend le jeu installable sur l'écran d'accueil.
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+  </script>
   <!-- Numéros de version : mis à jour par outils/version.py -->
   <script type="importmap">
 {
@@ -42,7 +52,7 @@
     "./js/scores.js": "./js/scores.js?v=ad04c644",
     "./js/tirage.js": "./js/tirage.js?v=4aa32153",
     "./js/ui/assiette.js": "./js/ui/assiette.js?v=2295803c",
-    "./js/ui/carnet.js": "./js/ui/carnet.js?v=6e5c895d",
+    "./js/ui/carnet.js": "./js/ui/carnet.js?v=fd813eb7",
     "./js/ui/carte.js": "./js/ui/carte.js?v=fc13322e",
     "./js/ui/cloche.js": "./js/ui/cloche.js?v=168aafca",
     "./js/ui/dom.js": "./js/ui/dom.js?v=77841324",

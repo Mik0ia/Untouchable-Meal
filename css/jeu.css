@@ -373,16 +373,22 @@
   padding: 0 1rem;
 }
 .carnet.ouvert .carnet-panneau {
-  max-height: 60dvh;
+  max-height: min(60dvh, var(--hauteur-dispo, 60dvh));
+  overflow-y: auto;
   padding: 0.25rem 1rem calc(1rem + env(safe-area-inset-bottom));
 }
+.carnet { transition: bottom 0.15s ease-out; }
+.carnet.clavier-ouvert .carnet-panneau { padding-bottom: 0.5rem; }
+.carnet.clavier-ouvert .carnet-onglet { padding-bottom: 0.4rem; border-radius: 14px 14px 0 0; }
+.carnet.clavier-ouvert .carnet-aide { display: none; }
 .carnet.ouvert .carnet-onglet { padding-bottom: 0.4rem; }
 /* l'onglet passe au-dessus du panneau quand il est ouvert */
 .carnet.ouvert { flex-direction: column; }
 .carnet-texte {
   display: block;
   width: 100%;
-  min-height: 11rem;
+  min-height: 7rem;
+  height: min(14rem, calc(var(--hauteur-dispo, 60dvh) - 3rem));
   max-height: 45dvh;
   resize: none;
   padding: 0.35rem 0.85rem;

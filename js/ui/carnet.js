@@ -41,6 +41,28 @@ export function creerCarnet() {
 
   document.body.append(el);
 
+  // Sur mobile, le clavier recouvre le bas de l'écran : on remonte le carnet
+  // juste au-dessus du clavier et on adapte sa hauteur à la place restante.
+  const vv = window.visualViewport;
+  function suivreClavier() {
+    if (!vv) return;
+    const clavier = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    el.style.bottom = `${clavier}px`;
+    el.classList.toggle("clavier-ouvert", clavier > 80);
+    const place = vv.height - onglet.offsetHeight - 24;
+    panneau.style.setProperty("--hauteur-dispo", `${Math.max(120, place)}px`);
+  }
+  if (vv) {
+    vv.addEventListener("resize", suivreClavier);
+    vv.addEventListener("scroll", suivreClavier);
+  }
+  zone.addEventListener("focus", () => {
+    suivreClavier();
+    // iOS fait défiler la page sous le clavier : on la garde en place.
+    setTimeout(suivreClavier, 300);
+  });
+  zone.addEventListener("blur", () => setTimeout(suivreClavier, 300));
+
   return {
     /** Affiche le carnet pour une partie donnée. */
     afficher(nouvelleCle) {
