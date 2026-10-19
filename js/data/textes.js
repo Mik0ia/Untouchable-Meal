@@ -41,6 +41,13 @@ export const TEXTES = {
   attenteMin: (min) => `Il faut au moins ${min} convives pour commencer.`,
   attenteHote: "L'hôte servira le dîner quand tout le monde sera là.",
   quitter: "Quitter la table",
+  quitterCourt: "Quitter",
+  quitterTitre: "Quitter la table ?",
+  quitterJoueur: "Tu quittes la partie en cours. Tu pourras revenir avec le code de la table.",
+  quitterHote: "Tu es l'hôte : si tu pars, la partie s'arrête pour tout le monde.",
+  arreterPourTous: "Arrêter la partie pour tous",
+  annuler: "Annuler",
+  chargementLong: "Ça ne charge pas ?",
 
   // Cartes
   toucherCarte: "Touche la carte pour la retourner",

@@ -47,7 +47,6 @@ function rejoindre() {
 
 function ouvrirPartie(pid) {
   if (partie) return;
-  chargement();
   partie = entrerPartie(pid, user, {
     afficher,
     carnet,

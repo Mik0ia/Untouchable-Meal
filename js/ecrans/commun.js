@@ -11,9 +11,46 @@ export function listeJoueurs(joueurs) {
     .sort((a, b) => (a.rejointLe || 0) - (b.rejointLe || 0));
 }
 
-/** Barre du haut pendant la partie : bouton "Ma carte". */
+/**
+ * Demande confirmation avant de quitter une partie en cours.
+ * L'hôte arrête la partie pour tout le monde (sans lui, elle ne peut pas continuer).
+ */
+export function confirmerQuitter(ctx) {
+  const fermer = () => fond.remove();
+  const confirmer = h("button", { class: "btn btn-plein", type: "button" },
+    ctx.estHote ? TEXTES.arreterPourTous : TEXTES.quitter);
+  confirmer.addEventListener("click", async () => {
+    confirmer.disabled = true;
+    fermer();
+    if (ctx.estHote) await ctx.act.leverTable();
+    else await ctx.act.quitter();
+  });
+  const fond = h("div", { class: "fenetre-fond", onclick: (e) => { if (e.target === fond) fermer(); } },
+    h("div", { class: "fenetre", role: "dialog", "aria-modal": "true", "aria-label": TEXTES.quitterTitre },
+      h("h2", { class: "titre" }, TEXTES.quitterTitre),
+      h("p", { class: "aide" }, ctx.estHote ? TEXTES.quitterHote : TEXTES.quitterJoueur),
+      h("div", { class: "fenetre-actions" },
+        confirmer,
+        h("button", { class: "btn", type: "button", onclick: fermer }, TEXTES.annuler)
+      )
+    )
+  );
+  document.body.append(fond);
+  confirmer.focus();
+}
+
+/** Lien "Quitter la table" pour les écrans sans barre du haut. */
+export function lienQuitter(ctx) {
+  return h("button", { class: "lien-discret", type: "button", onclick: () => confirmerQuitter(ctx) }, TEXTES.quitter);
+}
+
+/** Barre du haut pendant la partie : quitter, nom de la table, "Ma carte". */
 export function barreJeu(ctx) {
   return h("div", { class: "barre-jeu" },
+    h("button", {
+      class: "btn-quitter", type: "button", "aria-label": TEXTES.quitter,
+      onclick: () => confirmerQuitter(ctx)
+    }, "‹ ", TEXTES.quitterCourt),
     h("span", { class: "barre-table" }, ctx.info.nom),
     h("button", {
       class: "btn-ma-carte", type: "button",

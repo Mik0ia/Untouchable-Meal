@@ -17,6 +17,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.btn-quitter {
+  flex: none;
+  padding: 0.35rem 0.2rem;
+  background: none;
+  border: 0;
+  color: var(--creme-voile);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.btn-quitter:hover { color: var(--creme); }
+.barre-table { flex: 1; min-width: 0; text-align: center; }
 .btn-ma-carte {
   flex: none;
   padding: 0.35rem 0.8rem;

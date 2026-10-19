@@ -4,7 +4,7 @@ import { h, vider } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { ROLES } from "../data/roles.js";
 import { creerCarteRetournable } from "../ui/carte.js";
-import { listeJoueurs, avertissementHote } from "./commun.js";
+import { listeJoueurs, avertissementHote, lienQuitter } from "./commun.js";
 
 export function ecranCartes(ctx) {
   const role = ctx.secret.role;
@@ -61,7 +61,8 @@ export function ecranCartes(ctx) {
     repos,
     statut,
     zoneHote,
-    zoneAvert
+    zoneAvert,
+    lienQuitter(ctx)
   );
 
   // Déjà prêt (page rechargée) : la carte reste face cachée.

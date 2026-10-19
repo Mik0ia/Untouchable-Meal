@@ -6,13 +6,13 @@ import { REGLES } from "./config/regles.js";
 import { TEXTES } from "./data/textes.js";
 import { CAPONE, SERVEUR } from "./data/roles.js";
 import { r, set, update, remove, ecouter, lire, maintenant } from "./firebase.js";
-import { surveillerPresence, quitterPartie, memoriserPartie } from "./lobby.js";
+import { surveillerPresence, quitterPartie, memoriserPartie, leverTable } from "./lobby.js";
 import {
   majAnnonce, lancerPartie, rejouer, resoudreElimination, verifierReponses, resoudreServeur,
   commencerTours, avancerTour
 } from "./arbitre.js";
 import { sonner } from "./ui/sonnette.js";
-import { toast } from "./ui/dom.js";
+import { toast, h } from "./ui/dom.js";
 import { ecranSalon } from "./ecrans/salon.js";
 import { ecranCartes } from "./ecrans/cartes.js";
 import { ecranTour } from "./ecrans/tour.js";
@@ -71,8 +71,20 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     quitter: async () => {
       try { await quitterPartie(user, pid, ctx); } catch (e) { console.warn(e); }
       partir();
+    },
+    leverTable: async () => {
+      try { await leverTable(pid, ctx.info); } catch (e) { console.warn(e); }
+      partir("La table a été levée.");
     }
   };
+
+  // Écran d'attente : si la partie ne se charge pas, on peut toujours en sortir.
+  const sortieSecours = h("div", { class: "secours", hidden: true },
+    h("p", { class: "aide" }, TEXTES.chargementLong),
+    h("button", { class: "btn", type: "button", onclick: () => ctx.act.quitter() }, TEXTES.quitter));
+  afficher({ el: h("main", { class: "ecran ecran-chargement" },
+    h("div", { class: "chargement", "aria-label": "Chargement" }), sortieSecours) });
+  setTimeout(() => { sortieSecours.hidden = false; }, 4000);
 
   // ---------- Écoute de la base ----------
   const suivre = (chemin, cle, surErreur) =>
