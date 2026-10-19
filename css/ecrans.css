@@ -220,6 +220,8 @@ body.avec-carnet .ecran { padding-bottom: calc(5rem + env(safe-area-inset-bottom
   font-style: italic;
   font-size: 1.15rem;
 }
+.bandeau p + p { margin-top: 0.35rem; }
+.bandeau-suite { font-size: 1rem; color: var(--creme-voile); }
 .bandeau-fort { color: var(--creme-pale); border-color: var(--creme); }
 .zone-reponses { width: 100%; }
 .menu-reponses label {

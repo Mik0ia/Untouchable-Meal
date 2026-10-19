@@ -81,7 +81,11 @@ export async function resoudreElimination(pid, etat, solution, action, joueurs) 
     etaitPolicier: role === POLICIER
   };
   const maj = {};
-  if (role === POLICIER) {
+  // S'il reste des traîtres en jeu, Al Capone doit encore écrire ses mots :
+  // il peut faire gagner les traîtres sans le vouloir.
+  const traitres = Object.keys(solution.roles).filter((u) => solution.roles[u] === TRAITRE);
+  const traitresRestants = traitres.some((u) => u !== cible);
+  if (role === POLICIER && !traitresRestants) {
     maj[`parties/${pid}/resultats`] = calculerResultats({ solution, reponses: {}, elimination });
     maj[`parties/${pid}/etat`] = { ...etat, phase: "resultats", elimination, seq: (etat.seq || 0) + 1 };
   } else {
@@ -93,7 +97,9 @@ export async function resoudreElimination(pid, etat, solution, action, joueurs) 
 /** Appelée par l'hôte quand de nouvelles réponses arrivent. */
 export async function verifierReponses(pid, etat, solution, reponses) {
   const roles = solution.roles;
-  const attendus = Object.keys(roles).filter((u) => roles[u] === CAPONE || roles[u] === POLICIER);
+  const elimine = etat.elimination && etat.elimination.cible;
+  const attendus = Object.keys(roles).filter((u) =>
+    (roles[u] === CAPONE || roles[u] === POLICIER) && u !== elimine);
   if (!attendus.every((u) => reponses && reponses[u])) return;
   const resultats = calculerResultats({ solution, reponses, elimination: etat.elimination });
   await update(r(""), {

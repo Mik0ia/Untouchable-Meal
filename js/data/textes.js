@@ -77,11 +77,13 @@ export const TEXTES = {
   etaitPolicier: (nom) => `${nom} était le policier.`,
   netaitPasPolicier: (nom) => `${nom} n'était pas le policier.`,
   personneElimine: "Al Capone a épargné tout le monde.",
+  policierEliminePiege: "Il reste des traîtres à table : Al Capone doit encore écrire ses mots.",
   toiExecute: "Al Capone t'a fait exécuter. Reste à table et savoure la suite.",
 
   // Réponses
   reponsesTitre: "Le mot de la fin",
   reponsesConsigne: "Écris le mot que tu penses avoir deviné pour chaque plat.",
+  reponsesCaponeTraitres: "Le policier est tombé, mais méfie-toi des traîtres : chaque mot à eux que tu écris leur rapporte un point.",
   reponsesPolicier: "Écris les mots d'Al Capone pour chaque plat.",
   envoyer: "Rendre ma copie",
   reponseEnvoyee: "Ta copie est rendue. On attend la dernière…",

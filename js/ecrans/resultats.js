@@ -62,7 +62,9 @@ function construire(ctx, res, solution, reponses) {
   const uidDe = (role) => Object.keys(roles).find((u) => roles[u] === role);
   const repCapone = (reponses[uidDe(CAPONE)] || {}).mots || [];
   const repPolicier = (reponses[uidDe(POLICIER)] || {}).mots || [];
-  const avecReponses = res.raison !== "policierElimine";
+  // Anciennes parties : avant ce champ, "policierElimine" voulait dire "pas de réponses".
+  const avecReponses = res.avecReponses ?? res.raison !== "policierElimine";
+  const policierEnJeu = res.policierEnJeu ?? true;
   const aUnServeur = Object.values(roles).includes(SERVEUR);
   const choixServeur = solution.serveur || {};
   const nomDe = (u) => (ctx.joueurs[u] && ctx.joueurs[u].nom) || "?";
@@ -81,15 +83,17 @@ function construire(ctx, res, solution, reponses) {
       avecReponses ? [
         h("dt", {}, "Al Capone a écrit"),
         h("dd", {}, reponse(repCapone[i], res.detail.capone[i], res.detail.traitresDansCapone[i])),
-        h("dt", {}, "Le policier a écrit"),
-        h("dd", {}, reponse(repPolicier[i], res.detail.policier[i], res.detail.traitresDansPolicier[i]))
+        policierEnJeu ? [
+          h("dt", {}, "Le policier a écrit"),
+          h("dd", {}, reponse(repPolicier[i], res.detail.policier[i], res.detail.traitresDansPolicier[i]))
+        ] : null
       ] : null
     )
   )));
 
   const scores = avecReponses ? h("div", { class: "scores" },
     h("div", {}, h("strong", {}, String(res.scores.capone)), h("span", {}, "Al Capone")),
-    h("div", {}, h("strong", {}, String(res.scores.policier)), h("span", {}, "Policier")),
+    policierEnJeu ? h("div", {}, h("strong", {}, String(res.scores.policier)), h("span", {}, "Policier")) : null,
     res.aDesTraitres ? h("div", { class: res.traitresEnJeu ? "" : "hors-jeu" },
       h("strong", {}, String(res.scores.traitres)),
       h("span", {}, res.traitresEnJeu ? "Traîtres" : "Traîtres (hors jeu)")) : null

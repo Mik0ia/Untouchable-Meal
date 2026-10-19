@@ -13,12 +13,15 @@ export function bandeauElimination(etat) {
   const texte = e.cible === "personne"
     ? TEXTES.personneElimine
     : e.etaitPolicier ? TEXTES.etaitPolicier(e.nom) : TEXTES.netaitPasPolicier(e.nom);
-  return h("p", { class: `bandeau ${e.etaitPolicier ? "bandeau-fort" : ""}` }, texte);
+  return h("div", { class: `bandeau ${e.etaitPolicier ? "bandeau-fort" : ""}` },
+    h("p", {}, texte),
+    e.etaitPolicier && etat.phase === "reponses" ? h("p", { class: "bandeau-suite" }, TEXTES.policierEliminePiege) : null);
 }
 
 export function ecranReponses(ctx) {
   const role = ctx.secret.role;
-  const doitRepondre = role === CAPONE || role === POLICIER;
+  const elimine = ctx.etat.elimination && ctx.etat.elimination.cible === ctx.uid;
+  const doitRepondre = role === CAPONE || (role === POLICIER && !elimine);
   const zoneAvert = h("div");
   const zone = h("div", { class: "zone-reponses" });
 
@@ -44,7 +47,8 @@ export function ecranReponses(ctx) {
     }));
     const bouton = h("button", { class: "btn btn-plein", type: "submit" }, TEXTES.envoyer);
     formulaire = h("form", { class: "formulaire menu-reponses" },
-      h("p", { class: "aide" }, role === POLICIER ? TEXTES.reponsesPolicier : TEXTES.reponsesConsigne),
+      h("p", { class: "aide" }, role === POLICIER ? TEXTES.reponsesPolicier
+        : (ctx.etat.elimination && ctx.etat.elimination.etaitPolicier ? TEXTES.reponsesCaponeTraitres : TEXTES.reponsesConsigne)),
       ...REGLES.tours.flatMap((t, i) => [h("label", { for: `rep-${i}` }, t), champs[i]]),
       bouton
     );

@@ -75,9 +75,19 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
 
   let gagnant;
   let raison;
-  if (roleCible === POLICIER) {
-    gagnant = CAPONE;
-    raison = "policierElimine";
+  // Le policier éliminé n'écrit rien : seules les réponses d'Al Capone comptent.
+  const policierElimine = roleCible === POLICIER;
+  const policierEnJeu = !policierElimine;
+
+  if (policierElimine) {
+    // Al Capone gagne, sauf si les traîtres ont plus de points que lui.
+    if (traitresEnJeu && scoreTraitres > scoreCapone) {
+      gagnant = TRAITRE;
+      raison = "points";
+    } else {
+      gagnant = CAPONE;
+      raison = "policierElimine";
+    }
   } else if (traitresEnJeu && scoreTraitres > scoreCapone && scoreTraitres > scorePolicier) {
     gagnant = TRAITRE;
     raison = "points";
@@ -104,6 +114,9 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
     gagnants,
     scores: { capone: scoreCapone, policier: scorePolicier, traitres: scoreTraitres },
     traitresEnJeu,
+    policierEnJeu,
+    // false uniquement si la partie s'est arrêtée sans que personne n'écrive.
+    avecReponses: !!reponses[uidCapone],
     aDesTraitres: traitres.length > 0,
     detail
   };
