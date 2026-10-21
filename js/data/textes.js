@@ -69,6 +69,7 @@ export const TEXTES = {
 
   // Serveur
   serveurChoix: "Chez qui jettes-tu un œil pour ce plat ?",
+  serveurPasEncore: "Choisis d'abord un convive",
   serveurPlateau: "Choisis un convive",
   serveurRegarder: (nom) => `Regarder chez ${nom}`,
   serveurAttente: "Tu t'approches discrètement…",

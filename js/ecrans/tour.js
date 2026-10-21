@@ -20,20 +20,69 @@ export function ecranTour(ctx) {
   const assiette = creerAssiette();
   const aide = h("p", { class: "aide" });
   let sonnette = null;
-  const zoneServeur = h("div", { class: "zone-serveur" });
+  let fenetreServeur = null;
   let etatServeur = null;
 
-  // Le serveur : choisit un convive, puis découvre son mot sous la cloche.
+  // Ce que le serveur découvre chez le convive choisi pour ce plat.
+  function vuDuServeur(c) {
+    const cible = c.lireChoixServeur ? c.lireChoixServeur(tour) : null;
+    if (!cible) return null;
+    const table = (c.secret.table && c.secret.table[tour]) || {};
+    const info = table[cible];
+    if (!info) return null;
+    return { ...info, nom: (c.joueurs[cible] && c.joueurs[cible].nom) || "?" };
+  }
+
+  // Fenêtre de choix, ouverte au début du plat tant que le serveur n'a pas choisi.
+  function ouvrirChoixServeur(c) {
+    if (fenetreServeur) return;
+    let cible = null;
+    const valider = h("button", { class: "btn btn-plein", type: "button", disabled: true }, TEXTES.serveurPlateau);
+    const liste = h("ul", { class: "choix-serveur", role: "radiogroup" });
+    const candidats = listeJoueurs(c.joueurs)
+      .filter((j) => j.uid !== c.uid && (c.secret.table && c.secret.table[tour] && c.secret.table[tour][j.uid]));
+    for (const j of candidats) {
+      const b = h("button", { class: "cible", type: "button", role: "radio", "aria-checked": "false" },
+        avatar(j), h("span", { class: "nom" }, j.nom));
+      b.addEventListener("click", () => {
+        cible = j;
+        liste.querySelectorAll(".cible").forEach((x) => x.setAttribute("aria-checked", "false"));
+        b.setAttribute("aria-checked", "true");
+        valider.disabled = false;
+        valider.textContent = TEXTES.serveurRegarder(j.nom);
+      });
+      liste.append(h("li", {}, b));
+    }
+    valider.addEventListener("click", () => {
+      if (!cible) return;
+      fermerChoixServeur();
+      c.act.choisirServeur(tour, cible.uid);
+    });
+    fenetreServeur = h("div", { class: "fenetre-fond fenetre-serveur" },
+      h("div", { class: "fenetre", role: "dialog", "aria-modal": "true", "aria-label": TEXTES.serveurChoix },
+        h("img", { class: "fenetre-icone", src: "ressources/cartes/serveur.webp", alt: "" }),
+        h("h2", { class: "titre" }, REGLES.tours[tour]),
+        h("p", { class: "aide" }, TEXTES.serveurChoix),
+        liste,
+        valider
+      )
+    );
+    document.body.append(fenetreServeur);
+  }
+  function fermerChoixServeur() {
+    if (fenetreServeur) { fenetreServeur.remove(); fenetreServeur = null; }
+  }
+
+  // Le serveur a sa cloche comme tout le monde ; dessous, le mot du convive choisi.
   function majServeur(c) {
-    const vu = c.secret && c.secret.vus ? c.secret.vus[tour] : null;
-    const choix = c.choixServeur ? c.choixServeur[tour] : null;
-    const etat = vu ? "vu" : choix ? "attente" : "choix";
+    const vu = vuDuServeur(c);
+    const etat = vu ? "vu" : "choix";
     if (etat === etatServeur) return;
     etatServeur = etat;
     vider(assiette.contenu);
-    vider(zoneServeur);
-
-    if (etat === "vu") {
+    aide.classList.remove("estompe");
+    if (vu) {
+      fermerChoixServeur();
       const categorie = vu.type === "categorie";
       const dessous = h("div", { class: "mot-cache" },
         h("span", { class: "mot-etiquette" }, categorie ? TEXTES.serveurCategorie : TEXTES.serveurMotDe(vu.nom)),
@@ -41,36 +90,14 @@ export function ecranTour(ctx) {
       );
       assiette.contenu.append(creerCloche(dessous, () => { aide.classList.add("estompe"); }));
       aide.textContent = TEXTES.souleverCloche;
-      aide.classList.remove("estompe");
-    } else if (etat === "attente") {
-      assiette.contenu.append(h("p", { class: "plateau-texte attente-serveur" }, TEXTES.serveurAttente));
-      aide.textContent = "";
     } else {
-      assiette.contenu.append(h("p", { class: "plateau-texte" }, TEXTES.serveurPlateau));
-      aide.textContent = TEXTES.serveurChoix;
-      let cible = null;
-      const valider = h("button", { class: "btn btn-plein", type: "button", disabled: true }, TEXTES.serveurPlateau);
-      const liste = h("ul", { class: "choix-serveur", role: "radiogroup" });
-      // Tout le monde sauf Al Capone et soi-même.
-      const candidats = listeJoueurs(c.joueurs).filter((j) => j.uid !== c.uid && j.uid !== c.uidCapone);
-      for (const j of candidats) {
-        const b = h("button", { class: "cible", type: "button", role: "radio", "aria-checked": "false" },
-          avatar(j), h("span", { class: "nom" }, j.nom));
-        b.addEventListener("click", () => {
-          cible = j;
-          liste.querySelectorAll(".cible").forEach((x) => x.setAttribute("aria-checked", "false"));
-          b.setAttribute("aria-checked", "true");
-          valider.disabled = false;
-          valider.textContent = TEXTES.serveurRegarder(j.nom);
-        });
-        liste.append(h("li", {}, b));
-      }
-      valider.addEventListener("click", () => {
-        if (!cible) return;
-        valider.disabled = true;
-        c.act.choisirServeur(tour, cible.uid);
-      });
-      zoneServeur.append(liste, valider);
+      const dessous = h("div", { class: "mot-cache" },
+        h("span", { class: "mot-etiquette" }, TEXTES.serveurPasEncore));
+      assiette.contenu.append(creerCloche(dessous));
+      aide.textContent = "";
+      aide.append(h("button", { class: "lien-discret", type: "button", onclick: () => ouvrirChoixServeur(c) },
+        TEXTES.serveurChoix));
+      ouvrirChoixServeur(c);
     }
   }
 
@@ -108,8 +135,7 @@ export function ecranTour(ctx) {
     ),
     assiette.el,
     assiette.temps,
-    aide,
-    zoneServeur
+    aide
   );
 
   function tick(c) {
@@ -127,6 +153,7 @@ export function ecranTour(ctx) {
   return {
     el,
     tick,
-    maj(c) { tick(c); if (role === SERVEUR) majServeur(c); }
+    maj(c) { tick(c); if (role === SERVEUR) majServeur(c); },
+    detruire() { fermerChoixServeur(); }
   };
 }

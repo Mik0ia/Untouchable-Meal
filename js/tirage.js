@@ -3,7 +3,7 @@
 
 import { REGLES } from "./config/regles.js";
 import { CATEGORIES } from "./data/mots.js";
-import { COMPOSITIONS, CAPONE, ACOLYTE, POLICIER, TRAITRE } from "./data/roles.js";
+import { COMPOSITIONS, CAPONE, ACOLYTE, POLICIER, TRAITRE, SERVEUR } from "./data/roles.js";
 import { normaliser } from "./scores.js";
 
 export function melanger(liste) {
@@ -76,6 +76,24 @@ export function preparerPartie(uids) {
     else if (role === CAPONE) indices = [];
     secrets[uid] = { role, indices };
   });
+
+  // Le serveur choisit à chaque plat chez qui regarder : son téléphone connaît
+  // donc ce que chaque convive a sous sa cloche (sauf Al Capone, qui n'a rien).
+  const uidServeur = uids.find((u) => rolesParUid[u] === SERVEUR);
+  if (uidServeur) {
+    const table = {};
+    categories.forEach((cat, t) => {
+      table[t] = {};
+      uids.forEach((u) => {
+        const r = rolesParUid[u];
+        if (u === uidServeur || r === CAPONE) return;
+        table[t][u] = r === POLICIER
+          ? { type: "categorie", valeur: cat }
+          : { type: "mot", valeur: r === TRAITRE ? motsTraitres[t] : motsAcolytes[t] };
+      });
+    });
+    secrets[uidServeur].table = table;
+  }
 
   return {
     secrets,

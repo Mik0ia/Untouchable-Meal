@@ -47,6 +47,21 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
   let dernierNbAnnonce = null;
 
   memoriserPartie(uid, pid);
+
+  // Choix du serveur gardés sur le téléphone (une clé par manche).
+  const cleChoix = () => `um_serveur_${pid}_${(ctx.etat && ctx.etat.manche) || 1}_${uid}`;
+  function memoChoixServeur(tour, cible) {
+    try {
+      const m = JSON.parse(localStorage.getItem(cleChoix()) || "{}");
+      m[tour] = cible;
+      localStorage.setItem(cleChoix(), JSON.stringify(m));
+    } catch (e) { /* stockage indisponible */ }
+  }
+  ctx.lireChoixServeur = (tour) => {
+    if (ctx.choixLocal && ctx.choixLocal[tour]) return ctx.choixLocal[tour];
+    if (ctx.choixServeur && ctx.choixServeur[tour]) return ctx.choixServeur[tour];
+    try { return JSON.parse(localStorage.getItem(cleChoix()) || "{}")[tour] || null; } catch (e) { return null; }
+  };
   surveillerPresence(pid, uid);
 
   // ---------- Actions déclenchées par les écrans ----------
@@ -61,7 +76,13 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
       avancerTour(pid, tour, "sonnette");
     },
     eliminer: (cible) => set(r(`${base}/actions/elimination`), { cible, par: uid }),
-    choisirServeur: (tour, cible) => set(r(`${base}/actions/serveur/${tour}`), cible),
+    choisirServeur: (tour, cible) => {
+      memoChoixServeur(tour, cible);
+      ctx.choixLocal = { ...(ctx.choixLocal || {}), [tour]: cible };
+      planifier();
+      set(r(`${base}/actions/serveur/${tour}`), cible)
+        .catch((e) => console.warn("Choix du serveur non enregistré en ligne :", e && e.message));
+    },
     repondre: (mots) => set(r(`${base}/reponses/${uid}`), { mots }),
     rejouer: () => rejouer(pid, ctx.info, ctx.joueurs, ctx.etat),
     chargerSolution: async () => {
@@ -239,7 +260,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     const solution = ctx.solutionHote;
     if (phase === "tour" && solution && ctx.choixServeur) {
       const cle = `serv:${manche}:${JSON.stringify(ctx.choixServeur)}`;
-      uneFois(cle, () => resoudreServeur(pid, solution, ctx.choixServeur, joueurs));
+      uneFois(cle, () => resoudreServeur(pid, solution, ctx.choixServeur));
     }
     if (phase === "elimination" && solution && ctx.actionElimination && !etat.elimination) {
       uneFois(`elim:${manche}`, () => resoudreElimination(pid, etat, solution, ctx.actionElimination, joueurs));

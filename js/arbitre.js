@@ -108,28 +108,13 @@ export async function verifierReponses(pid, etat, solution, reponses) {
   });
 }
 
-/**
- * Le serveur a choisi chez qui regarder : l'hôte lui envoie ce qu'il découvre.
- * @param {Object} choix  { [tour]: uidCible }
- */
-export async function resoudreServeur(pid, solution, choix, joueurs) {
-  const roles = solution.roles || {};
-  const uidServeur = Object.keys(roles).find((u) => roles[u] === SERVEUR);
-  if (!uidServeur || !choix) return;
+/** Note chez qui le serveur a regardé (affiché à l'écran des résultats). */
+export async function resoudreServeur(pid, solution, choix) {
+  if (!choix) return;
   const deja = solution.serveur || {};
   const maj = {};
   for (const [t, cible] of Object.entries(choix)) {
-    if (cible === null || cible === undefined) continue;
-    if (deja[t] !== undefined && deja[t] !== null) continue;
-    const i = Number(t);
-    const role = roles[cible];
-    if (!role || role === CAPONE || cible === uidServeur) continue;
-    const vu = role === POLICIER
-      ? { type: "categorie", valeur: solution.categories[i] }
-      : { type: "mot", valeur: role === TRAITRE ? solution.motsTraitres[i] : solution.motsAcolytes[i] };
-    vu.nom = (joueurs[cible] && joueurs[cible].nom) || "?";
-    maj[`parties/${pid}/secrets/${uidServeur}/vus/${t}`] = vu;
-    maj[`parties/${pid}/solution/serveur/${t}`] = cible;
+    if (cible && !deja[t]) maj[`parties/${pid}/solution/serveur/${t}`] = cible;
   }
   if (Object.keys(maj).length) await update(r(""), maj);
 }
