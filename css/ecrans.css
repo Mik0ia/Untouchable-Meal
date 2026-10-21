@@ -281,6 +281,7 @@ body.avec-carnet .ecran { padding-bottom: calc(5rem + env(safe-area-inset-bottom
 .scores strong { font-family: var(--police-titre); font-size: 2.2rem; font-weight: 400; color: var(--creme-pale); line-height: 1.1; }
 .scores span { font-style: italic; color: var(--creme-voile); font-size: 0.95rem; }
 .scores .hors-jeu { opacity: 0.45; }
+.scores .hors-jeu-doux { opacity: 0.7; }
 .scores .hors-jeu strong { text-decoration: line-through; text-decoration-thickness: 1px; }
 
 .plats { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }

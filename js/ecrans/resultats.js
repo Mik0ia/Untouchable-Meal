@@ -93,7 +93,8 @@ function construire(ctx, res, solution, reponses) {
 
   const scores = avecReponses ? h("div", { class: "scores" },
     h("div", {}, h("strong", {}, String(res.scores.capone)), h("span", {}, "Al Capone")),
-    policierEnJeu ? h("div", {}, h("strong", {}, String(res.scores.policier)), h("span", {}, "Policier")) : null,
+    h("div", { class: policierEnJeu ? "" : "hors-jeu-doux" }, h("strong", {}, String(res.scores.policier)),
+      h("span", {}, policierEnJeu ? "Policier" : "Policier (éliminé)")),
     res.aDesTraitres ? h("div", { class: res.traitresEnJeu ? "" : "hors-jeu" },
       h("strong", {}, String(res.scores.traitres)),
       h("span", {}, res.traitresEnJeu ? "Traîtres" : "Traîtres (hors jeu)")) : null

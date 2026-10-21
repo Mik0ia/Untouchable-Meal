@@ -75,27 +75,27 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
 
   let gagnant;
   let raison;
-  // Le policier éliminé n'écrit rien : seules les réponses d'Al Capone comptent.
+  // Le policier éliminé n'écrit rien mais reste dans le calcul avec 0 point :
+  // si Al Capone ne trouve aucun mot, le policier gagne quand même.
   const policierElimine = roleCible === POLICIER;
   const policierEnJeu = !policierElimine;
+  if (policierElimine) {
+    detail.policier = detail.policier.map(() => false);
+    detail.traitresDansPolicier = detail.traitresDansPolicier.map(() => false);
+  }
+  const scorePolicierFinal = policierElimine ? 0 : scorePolicier;
+  if (policierElimine) {
+    scoreTraitres = total(detail.traitresDansCapone);
+  }
 
   // Égalités : le policier passe avant les traîtres, les traîtres avant Al Capone.
   // Les traîtres doivent avoir marqué au moins 1 point pour gagner.
   const traitresBattentCapone = traitresEnJeu && scoreTraitres > 0 && scoreTraitres >= scoreCapone;
 
-  if (policierElimine) {
-    // Al Capone gagne, sauf si les traîtres ont au moins autant de points que lui.
-    if (traitresBattentCapone) {
-      gagnant = TRAITRE;
-      raison = "points";
-    } else {
-      gagnant = CAPONE;
-      raison = "policierElimine";
-    }
-  } else if (traitresBattentCapone && scoreTraitres > scorePolicier) {
+  if (traitresBattentCapone && scoreTraitres > scorePolicierFinal) {
     gagnant = TRAITRE;
     raison = "points";
-  } else if (scorePolicier >= scoreCapone) {
+  } else if (scorePolicierFinal >= scoreCapone) {
     gagnant = POLICIER;
     raison = "points";
   } else {
@@ -116,7 +116,7 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
     gagnant,
     raison,
     gagnants,
-    scores: { capone: scoreCapone, policier: scorePolicier, traitres: scoreTraitres },
+    scores: { capone: scoreCapone, policier: scorePolicierFinal, traitres: scoreTraitres },
     traitresEnJeu,
     policierEnJeu,
     // false uniquement si la partie s'est arrêtée sans que personne n'écrive.

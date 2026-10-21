@@ -81,16 +81,9 @@ export async function resoudreElimination(pid, etat, solution, action, joueurs) 
     etaitPolicier: role === POLICIER
   };
   const maj = {};
-  // S'il reste des traîtres en jeu, Al Capone doit encore écrire ses mots :
-  // il peut faire gagner les traîtres sans le vouloir.
-  const traitres = Object.keys(solution.roles).filter((u) => solution.roles[u] === TRAITRE);
-  const traitresRestants = traitres.some((u) => u !== cible);
-  if (role === POLICIER && !traitresRestants) {
-    maj[`parties/${pid}/resultats`] = calculerResultats({ solution, reponses: {}, elimination });
-    maj[`parties/${pid}/etat`] = { ...etat, phase: "resultats", elimination, seq: (etat.seq || 0) + 1 };
-  } else {
-    maj[`parties/${pid}/etat`] = { ...etat, phase: "reponses", elimination, seq: (etat.seq || 0) + 1 };
-  }
+  // Même si le policier est éliminé, Al Capone doit écrire ses mots :
+  // le policier compte pour 0 point et les traîtres peuvent encore gagner.
+  maj[`parties/${pid}/etat`] = { ...etat, phase: "reponses", elimination, seq: (etat.seq || 0) + 1 };
   await update(r(""), maj);
 }
 
