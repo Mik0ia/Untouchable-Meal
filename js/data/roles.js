@@ -67,3 +67,22 @@ export const COMPOSITIONS = {
   9:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, SERVEUR, TRAITRE, TRAITRE, TRAITRE],
   10: [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, SERVEUR, TRAITRE, TRAITRE, TRAITRE]
 };
+
+// Composition quand l'hôte retire le serveur : on prend la ligne du dessus
+// (un joueur de plus) et on enlève le serveur. À 10, le serveur devient un traître.
+export const COMPOSITIONS_SANS_SERVEUR = {
+  3:  [ACOLYTE, CAPONE, POLICIER],
+  4:  [ACOLYTE, CAPONE, POLICIER, TRAITRE],
+  5:  [ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE],
+  6:  [ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE],
+  7:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE],
+  8:  [ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE],
+  9:  [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE],
+  10: [ACOLYTE, ACOLYTE, ACOLYTE, ACOLYTE, CAPONE, POLICIER, TRAITRE, TRAITRE, TRAITRE, TRAITRE]
+};
+
+/** Composition à utiliser pour une table, avec ou sans serveur. */
+export function composition(nbJoueurs, avecServeur = true) {
+  const table = avecServeur ? COMPOSITIONS : COMPOSITIONS_SANS_SERVEUR;
+  return table[nbJoueurs] || null;
+}

@@ -22,6 +22,10 @@ export const TEXTES = {
   privee: "Table privée",
   priveeAide: "Invisible dans la liste. On la rejoint uniquement avec son code.",
   creerBouton: "Dresser la table",
+  avecServeur: "Avec le serveur",
+  avecServeurAide: "Le serveur entre en jeu à partir de 6 convives. Sans lui, sa place revient à un autre rôle.",
+  serveurOui: "Avec le serveur",
+  serveurNon: "Sans le serveur",
   retour: "Retour",
 
   // Rejoindre

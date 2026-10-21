@@ -32,7 +32,7 @@ export function majAnnonce(pid, info, joueurs, etat) {
 /** Lance la partie : tire les rôles et les mots, puis révèle les cartes. */
 export async function lancerPartie(pid, info, joueurs, etat) {
   const uids = Object.keys(joueurs || {});
-  const { secrets, solution } = preparerPartie(uids);
+  const { secrets, solution } = preparerPartie(uids, { avecServeur: info.serveur !== false });
   const maj = {
     [`parties/${pid}/secrets`]: secrets,
     [`parties/${pid}/solution`]: solution,

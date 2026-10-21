@@ -6,7 +6,7 @@ import { REGLES } from "./config/regles.js";
 import { TEXTES } from "./data/textes.js";
 import { CAPONE, SERVEUR } from "./data/roles.js";
 import { r, set, update, remove, ecouter, lire, maintenant } from "./firebase.js";
-import { surveillerPresence, quitterPartie, memoriserPartie, leverTable } from "./lobby.js";
+import { surveillerPresence, quitterPartie, memoriserPartie, leverTable, changerServeur } from "./lobby.js";
 import {
   majAnnonce, lancerPartie, rejouer, resoudreElimination, verifierReponses, resoudreServeur,
   commencerTours, avancerTour
@@ -68,6 +68,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
   ctx.act = {
     lancer: () => lancerPartie(pid, ctx.info, ctx.joueurs, ctx.etat),
     retirer: (cible) => remove(r(`${base}/joueurs/${cible}`)),
+    changerServeur: (avec) => changerServeur(pid, avec),
     pret: () => set(r(`${base}/joueurs/${uid}/pret`), true),
     forcer: () => commencerTours(pid),
     sonner: (tour) => {

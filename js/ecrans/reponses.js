@@ -3,7 +3,7 @@
 import { h, vider } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
-import { CAPONE, POLICIER, TRAITRE, COMPOSITIONS } from "../data/roles.js";
+import { CAPONE, POLICIER, TRAITRE, composition } from "../data/roles.js";
 import { barreJeu, avertissementHote } from "./commun.js";
 import { CARTE_EXECUTE } from "../data/visuels.js";
 
@@ -50,7 +50,7 @@ export function ecranReponses(ctx) {
       h("p", { class: "aide" }, role === POLICIER ? TEXTES.reponsesPolicier
         : (ctx.etat.elimination && ctx.etat.elimination.etaitPolicier ? TEXTES.reponsesCaponeTraitres : TEXTES.reponsesConsigne)),
       role === CAPONE && ctx.etat.elimination && ctx.etat.elimination.etaitPolicier &&
-        (COMPOSITIONS[ctx.etat.nbJoueurs] || []).includes(TRAITRE)
+        (composition(ctx.etat.nbJoueurs, ctx.info.serveur !== false) || []).includes(TRAITRE)
         ? h("p", { class: "aide" }, TEXTES.reponsesCaponeTraitresSuite) : null,
       ...REGLES.tours.flatMap((t, i) => [h("label", { for: `rep-${i}` }, t), champs[i]]),
       bouton

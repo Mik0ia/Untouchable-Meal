@@ -3,7 +3,7 @@
 
 import { REGLES } from "./config/regles.js";
 import { CATEGORIES } from "./data/mots.js";
-import { COMPOSITIONS, CAPONE, ACOLYTE, POLICIER, TRAITRE, SERVEUR } from "./data/roles.js";
+import { composition, CAPONE, ACOLYTE, POLICIER, TRAITRE, SERVEUR } from "./data/roles.js";
 import { normaliser } from "./scores.js";
 
 export function melanger(liste) {
@@ -26,8 +26,8 @@ export function sansDoublons(mots) {
   });
 }
 
-export function compositionPour(nbJoueurs) {
-  const compo = COMPOSITIONS[nbJoueurs];
+export function compositionPour(nbJoueurs, avecServeur = true) {
+  const compo = composition(nbJoueurs, avecServeur);
   if (!compo) throw new Error(`Aucune composition définie pour ${nbJoueurs} joueurs (voir js/data/roles.js).`);
   if (compo.length !== nbJoueurs) throw new Error(`La composition pour ${nbJoueurs} joueurs contient ${compo.length} rôles.`);
   return compo;
@@ -40,9 +40,9 @@ export function compositionPour(nbJoueurs) {
  *   secrets[uid] = { role, indices: [3 textes] }  ce que voit chaque joueur
  *   solution     = { roles, motsAcolytes, motsTraitres, categories }
  */
-export function preparerPartie(uids) {
+export function preparerPartie(uids, { avecServeur = true } = {}) {
   const nbTours = REGLES.tours.length;
-  const roles = melanger(compositionPour(uids.length));
+  const roles = melanger(compositionPour(uids.length, avecServeur));
 
   // Catégories utilisables (au moins 2 mots distincts).
   const categoriesValides = Object.keys(CATEGORIES)

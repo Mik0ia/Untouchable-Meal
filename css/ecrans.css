@@ -181,6 +181,11 @@ body.avec-carnet .ecran { padding-bottom: calc(5rem + env(safe-area-inset-bottom
 }
 .retirer:hover { color: var(--creme); border-color: var(--creme); }
 
+/* ---------- Option du salon ---------- */
+.option-salon { width: 100%; text-align: left; }
+.option-salon .ligne-interrupteur { margin-top: 0; }
+.option-salon .aide { text-align: center; max-width: none; }
+
 /* ---------- Création ---------- */
 .ecran-creer .titre, .ecran-rejoindre .titre { align-self: stretch; }
 

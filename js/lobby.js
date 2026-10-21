@@ -35,7 +35,7 @@ export function fiche(user) {
 }
 
 /** Crée une table et y installe l'hôte. Retourne l'identifiant de la partie. */
-export async function creerPartie(user, { nom, max, privee }) {
+export async function creerPartie(user, { nom, max, privee, serveur = true }) {
   const pid = nouvelId();
   const code = await nouveauCode();
   const maxJ = Math.max(REGLES.minJoueurs, Math.min(REGLES.maxJoueurs, Number(max) || REGLES.maxJoueurs));
@@ -43,7 +43,7 @@ export async function creerPartie(user, { nom, max, privee }) {
 
   const maj = {
     [`parties/${pid}/info`]: {
-      nom: nomTable, max: maxJ, privee: !!privee, code, hote: user.uid, creeLe: serverTimestamp()
+      nom: nomTable, max: maxJ, privee: !!privee, serveur: !!serveur, code, hote: user.uid, creeLe: serverTimestamp()
     },
     [`parties/${pid}/etat`]: { phase: "salon", seq: 0, manche: 1 },
     [`parties/${pid}/joueurs/${user.uid}`]: fiche(user),
@@ -133,4 +133,9 @@ export function memoriserPartie(uid, pid) {
 }
 export function partieMemorisee(uid) {
   try { return localStorage.getItem(cleMemo(uid)); } catch (e) { return null; }
+}
+
+/** L'hôte active ou retire le serveur depuis le salon. */
+export function changerServeur(pid, avecServeur) {
+  return set(r(`parties/${pid}/info/serveur`), !!avecServeur);
 }

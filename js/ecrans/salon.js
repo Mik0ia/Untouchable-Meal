@@ -9,6 +9,7 @@ export function ecranSalon(ctx) {
   const liste = h("ul", { class: "liste-convives" });
   const compteur = h("p", { class: "compteur" });
   const zoneAction = h("div", { class: "actions" });
+  const zoneServeur = h("div", { class: "option-salon" });
 
   const code = ctx.info.code;
   const boutonCode = h("button", { class: "code-table", type: "button", "aria-label": `Code ${code}, copier` },
@@ -24,6 +25,7 @@ export function ecranSalon(ctx) {
     h("p", { class: "aide" }, TEXTES.partager),
     boutonCode,
     compteur,
+    zoneServeur,
     liste,
     zoneAction,
     h("button", { class: "lien-discret", type: "button", onclick: () => ctx.act.quitter() }, TEXTES.quitter)
@@ -46,6 +48,19 @@ export function ecranSalon(ctx) {
             }, "×")
           : null
       ));
+    }
+
+    // Option du serveur : modifiable par l'hôte, visible par tous.
+    const avecServeur = c.info.serveur !== false;
+    vider(zoneServeur);
+    if (c.estHote) {
+      const inter = h("input", { id: "salon-serveur", type: "checkbox", class: "interrupteur", checked: avecServeur });
+      inter.addEventListener("change", () => c.act.changerServeur(inter.checked));
+      zoneServeur.append(h("div", { class: "ligne-interrupteur" },
+        h("label", { for: "salon-serveur" }, TEXTES.avecServeur, h("small", {}, TEXTES.avecServeurAide)),
+        inter));
+    } else {
+      zoneServeur.append(h("p", { class: "aide" }, avecServeur ? TEXTES.serveurOui : TEXTES.serveurNon));
     }
 
     vider(zoneAction);

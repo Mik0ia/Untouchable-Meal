@@ -1,7 +1,7 @@
 // Carte de rôle qui se retourne, et fenêtre "Ma carte".
 
 import { h } from "./dom.js";
-import { ROLES, DOS_DE_CARTE, COMPOSITIONS } from "../data/roles.js";
+import { ROLES, DOS_DE_CARTE, composition } from "../data/roles.js";
 
 const mouvementReduit = () =>
   window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -95,7 +95,7 @@ export function creerCarteRetournable(role, surRetournee) {
  * Fenêtre "Ma carte" : sa carte et son objectif, avec un bouton pour voir
  * tous les rôles (et combien il y en a à cette table).
  */
-export function ouvrirMaCarte(role, nbJoueurs) {
+export function ouvrirMaCarte(role, nbJoueurs, avecServeur = true) {
   const info = ROLES[role];
   if (!info) return;
   const fermer = () => { fond.remove(); document.removeEventListener("keydown", surTouche); };
@@ -110,7 +110,7 @@ export function ouvrirMaCarte(role, nbJoueurs) {
     )
   );
 
-  const compo = COMPOSITIONS[nbJoueurs] || [];
+  const compo = composition(nbJoueurs, avecServeur) || [];
   const combien = (r) => compo.filter((x) => x === r).length;
   const vueRoles = h("div", { class: "fenetre fenetre-roles", role: "dialog", "aria-modal": "true", "aria-label": "Les rôles" },
     h("h2", { class: "titre" }, "Les rôles"),

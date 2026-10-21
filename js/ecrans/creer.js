@@ -19,6 +19,7 @@ export function ecranCreer(user, { retour, versPartie }) {
   const choixMax = h("select", { id: "max-joueurs" },
     tailles.map((n) => h("option", { value: n, selected: n === maxDefaut }, String(n))));
   const caseePrivee = h("input", { id: "privee", type: "checkbox", class: "interrupteur" });
+  const caseServeur = h("input", { id: "serveur", type: "checkbox", class: "interrupteur", checked: true });
   const bouton = h("button", { class: "btn btn-plein", type: "submit" }, TEXTES.creerBouton);
 
   const form = h("form", { class: "formulaire" },
@@ -30,6 +31,10 @@ export function ecranCreer(user, { retour, versPartie }) {
       h("label", { for: "privee" }, TEXTES.privee, h("small", {}, TEXTES.priveeAide)),
       caseePrivee
     ),
+    h("div", { class: "ligne-interrupteur" },
+      h("label", { for: "serveur" }, TEXTES.avecServeur, h("small", {}, TEXTES.avecServeurAide)),
+      caseServeur
+    ),
     bouton
   );
 
@@ -38,7 +43,7 @@ export function ecranCreer(user, { retour, versPartie }) {
     bouton.disabled = true;
     try {
       const pid = await creerPartie(user, {
-        nom: champNom.value, max: choixMax.value, privee: caseePrivee.checked
+        nom: champNom.value, max: choixMax.value, privee: caseePrivee.checked, serveur: caseServeur.checked
       });
       versPartie(pid);
     } catch (err) {
