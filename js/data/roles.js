@@ -38,7 +38,8 @@ export const ROLES = {
     objectif:
       "Ton mot est de la même catégorie que celui des acolytes. Glisse-le dans la " +
       "conversation : chaque fois qu'Al Capone ou le policier l'écrit, tu marques " +
-      "un point. Plus de points qu'eux, et tu gagnes seul."
+      "un point. Autant de points qu'Al Capone et plus que le policier, et ton équipe " +
+      "de traîtres gagne, même si tu as été éliminé."
   },
   [SERVEUR]: {
     nom: "Serveur",

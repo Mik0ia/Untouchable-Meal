@@ -79,16 +79,20 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
   const policierElimine = roleCible === POLICIER;
   const policierEnJeu = !policierElimine;
 
+  // Égalités : le policier passe avant les traîtres, les traîtres avant Al Capone.
+  // Les traîtres doivent avoir marqué au moins 1 point pour gagner.
+  const traitresBattentCapone = traitresEnJeu && scoreTraitres > 0 && scoreTraitres >= scoreCapone;
+
   if (policierElimine) {
-    // Al Capone gagne, sauf si les traîtres ont plus de points que lui.
-    if (traitresEnJeu && scoreTraitres > scoreCapone) {
+    // Al Capone gagne, sauf si les traîtres ont au moins autant de points que lui.
+    if (traitresBattentCapone) {
       gagnant = TRAITRE;
       raison = "points";
     } else {
       gagnant = CAPONE;
       raison = "policierElimine";
     }
-  } else if (traitresEnJeu && scoreTraitres > scoreCapone && scoreTraitres > scorePolicier) {
+  } else if (traitresBattentCapone && scoreTraitres > scorePolicier) {
     gagnant = TRAITRE;
     raison = "points";
   } else if (scorePolicier >= scoreCapone) {
@@ -99,14 +103,14 @@ export function calculerResultats({ solution, reponses = {}, elimination = null 
     raison = "points";
   }
 
-  // Liste des joueurs gagnants (un traître éliminé ne peut pas gagner).
+  // Liste des joueurs gagnants : tout le camp gagnant, éliminés compris
+  // (un traître éliminé gagne si les autres traîtres l'emportent).
   const camp = {
     [CAPONE]: [CAPONE, ACOLYTE],
     [POLICIER]: [POLICIER, SERVEUR],
     [TRAITRE]: [TRAITRE]
   }[gagnant];
-  const gagnants = Object.keys(roles).filter((u) =>
-    camp.includes(roles[u]) && !(u === cible && roles[u] === TRAITRE));
+  const gagnants = Object.keys(roles).filter((u) => camp.includes(roles[u]));
 
   return {
     gagnant,
