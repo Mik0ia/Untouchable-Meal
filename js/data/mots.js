@@ -9,16 +9,25 @@ export const CATEGORIES = {
     "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle", "Restaurant", "Cinéma"
   ],
   "Lieux police": [
-    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Interrogatoire",
-    "Bureau", "Archives", "Infirmerie"
+    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Bureau", "Archives", "Infirmerie"
   ],
-  "Activités": [
-    "Contrebande", "Racket", "Arrestation", "Blanchiment", "Chantage",
-    "Poursuite", "Traquenard", "Kidnapping"
+  "Activités Mafia": [
+    "Contrebande", "Racket", "Blanchiment", "Chantage", "Poursuite", "Traquenard", "Kidnapping", "Dealer", "Assassinat", "Intimidation", "Corruption"
   ],
-  "Objets": [
-    "Cigare", "Bouteille", "Bague", "Billets", "Caisse", "Sacs",
-    "Jukebox", "Tonneau", "Montre", "Tourne-Disque", "Bible"
+  "Activités Police": [
+    "Arrestation", "Raid", "Interrogatoire", "Poursuite", "Enquête", "Contrôle", "Juger"
+  ],
+  "Contenant": [
+    "Bouteille", "Caisse", "Sacs", "Tonneau", "Coffre", "Carton", "Mallette"
+  ],
+  "Marchandise": [
+    "Billets", "Lingot", "Alcool", "Tabac", "Parfums", "Bijoux",
+  ],
+  "Bijoux": [
+    "Bague", "Montre", "Collier", "Chevalière", "Broche", "Chapelet"
+  ],
+    "Drogue": [
+    "Cigare", "Cigarette", "Pipe", "Opium", "Morphine", "Cocaïne", "Héroïne"
   ],
   "Armes Blanche": [
     "Couteau", "Matraque", "Batte", "Corde", "Hache"
@@ -30,8 +39,7 @@ export const CATEGORIES = {
     "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi", "Wagon", "Cheval"
   ],
   "Principes moraux": [
-    "Corruption", "Loyauté", "Vengeance", "Trahison", "Intimidation",
-    "Respect", "Justice"
+    "Corruption", "Loyauté", "Vengeance", "Trahison", "Respect", "Justice"
   ],
   "Boisson": [
     "Whisky", "Bière","Café", "Vin", "Rhum", "Coca", "Eau", "Liqueur"
