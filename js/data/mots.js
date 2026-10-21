@@ -6,7 +6,7 @@
 
 export const CATEGORIES = {
   "Lieux mafia": [
-    "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle"
+    "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle", "Restaurant", "Cinéma"
   ],
   "Lieux police": [
     "Commissariat", "Tribunal", "Cellule", "Armurerie", "Interrogatoire",
@@ -18,20 +18,20 @@ export const CATEGORIES = {
   ],
   "Objets": [
     "Cigare", "Bouteille", "Bague", "Billets", "Caisse", "Sacs",
-    "Jukebox", "Tonneau"
+    "Jukebox", "Tonneau", "Montre", "Tourne-Disque", "Bible"
   ],
   "Armes": [
-    "Thompson", "Revolver", "Couteau", "Matraque", "Fusil", "Batte",
-    "Dynamite", "Corde"
+    "Mitraillette", "Revolver", "Couteau", "Matraque", "Fusil", "Batte",
+    "Dynamite", "Corde", "Matraque"
   ],
   "Moyens de transport": [
-    "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi"
+    "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi", "Wagon", "Cheval"
   ],
   "Principes moraux": [
     "Corruption", "Loyauté", "Vengeance", "Trahison", "Intimidation",
-    "Respect", "Omerta", "Justice"
+    "Respect", "Justice"
   ],
   "Alimentaire": [
-    "Whisky", "Bière", "Caviar", "Rôti", "Sandwich", "Café", "Poisson", "Pain"
+    "Whisky", "Bière", "Caviar", "Rôti", "Sandwich", "Café", "Poisson", "Pain", "Steak", "Salade", "Vin"
   ]
 };
