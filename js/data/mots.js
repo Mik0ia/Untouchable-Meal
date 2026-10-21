@@ -20,9 +20,11 @@ export const CATEGORIES = {
     "Cigare", "Bouteille", "Bague", "Billets", "Caisse", "Sacs",
     "Jukebox", "Tonneau", "Montre", "Tourne-Disque", "Bible"
   ],
-  "Armes": [
-    "Mitraillette", "Revolver", "Couteau", "Matraque", "Fusil", "Batte",
-    "Dynamite", "Corde", "Matraque"
+  "Armes Blanche": [
+    "Couteau", "Matraque", "Batte", "Corde", "Hache"
+  ],
+  "Armes à feu": [
+    "Mitraillette", "Fusil à pompe", "Fusil", "Pistolet", "Silencieux"
   ],
   "Moyens de transport": [
     "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi", "Wagon", "Cheval"
@@ -31,7 +33,10 @@ export const CATEGORIES = {
     "Corruption", "Loyauté", "Vengeance", "Trahison", "Intimidation",
     "Respect", "Justice"
   ],
-  "Alimentaire": [
-    "Whisky", "Bière", "Caviar", "Rôti", "Sandwich", "Café", "Poisson", "Pain", "Steak", "Salade", "Vin"
+  "Boisson": [
+    "Whisky", "Bière","Café", "Vin", "Rhum", "Coca", "Eau", "Liqueur"
+  ],
+  "Nourriture": [
+    "Caviar", "Rôti", "Sandwich", "Poisson", "Pain", "Steak", "Salade",
   ]
 };
