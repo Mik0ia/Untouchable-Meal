@@ -123,23 +123,23 @@ function transaction(pid, modifier) {
 }
 
 /** Tout le monde est prêt : on sert l'entrée. */
-export function commencerTours(pid) {
+export function commencerTours(pid, duree = REGLES.dureeTour) {
   return transaction(pid, (cur) => {
     if (cur.phase !== "cartes") return undefined;
     return {
-      ...cur, phase: "tour", tour: 0, debut: maintenant(), duree: REGLES.dureeTour,
+      ...cur, phase: "tour", tour: 0, debut: maintenant(), duree,
       seq: (cur.seq || 0) + 1, cause: "debut"
     };
   });
 }
 
 /** Passe au plat suivant (sonnette ou fin du chrono). */
-export function avancerTour(pid, tour, cause) {
+export function avancerTour(pid, tour, cause, duree = REGLES.dureeTour) {
   return transaction(pid, (cur) => {
     if (cur.phase !== "tour" || cur.tour !== tour) return undefined;
     const base = { ...cur, seq: (cur.seq || 0) + 1, cause };
     if (tour + 1 < nbTours()) {
-      return { ...base, tour: tour + 1, debut: maintenant(), duree: REGLES.dureeTour };
+      return { ...base, tour: tour + 1, debut: maintenant(), duree };
     }
     return { ...base, phase: "elimination" };
   });

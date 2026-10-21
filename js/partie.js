@@ -6,7 +6,7 @@ import { REGLES } from "./config/regles.js";
 import { TEXTES } from "./data/textes.js";
 import { CAPONE, SERVEUR } from "./data/roles.js";
 import { r, set, update, remove, ecouter, lire, maintenant } from "./firebase.js";
-import { surveillerPresence, quitterPartie, memoriserPartie, leverTable, changerServeur } from "./lobby.js";
+import { surveillerPresence, quitterPartie, memoriserPartie, leverTable, changerServeur, changerDuree } from "./lobby.js";
 import {
   majAnnonce, lancerPartie, rejouer, resoudreElimination, verifierReponses, resoudreServeur,
   commencerTours, avancerTour
@@ -48,6 +48,9 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
 
   memoriserPartie(uid, pid);
 
+  // Durée d'un plat choisie par l'hôte (en secondes).
+  const dureeTable = () => Number(ctx.info && ctx.info.duree) || REGLES.dureeTour;
+
   // Choix du serveur gardés sur le téléphone (une clé par manche).
   const cleChoix = () => `um_serveur_${pid}_${(ctx.etat && ctx.etat.manche) || 1}_${uid}`;
   function memoChoixServeur(tour, cible) {
@@ -69,12 +72,13 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     lancer: () => lancerPartie(pid, ctx.info, ctx.joueurs, ctx.etat),
     retirer: (cible) => remove(r(`${base}/joueurs/${cible}`)),
     changerServeur: (avec) => changerServeur(pid, avec),
+    changerDuree: (sec) => changerDuree(pid, sec),
     pret: () => set(r(`${base}/joueurs/${uid}/pret`), true),
-    forcer: () => commencerTours(pid),
+    forcer: () => commencerTours(pid, dureeTable()),
     sonner: (tour) => {
       sonner();
       dernierSeq = (ctx.etat.seq || 0) + 1; // on a déjà joué le son localement
-      avancerTour(pid, tour, "sonnette");
+      avancerTour(pid, tour, "sonnette", dureeTable());
     },
     eliminer: (cible) => set(r(`${base}/actions/elimination`), { cible, par: uid }),
     choisirServeur: (tour, cible) => {
@@ -151,7 +155,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     const fin = (ctx.etat.debut || 0) + (ctx.etat.duree || REGLES.dureeTour) * 1000;
     if (maintenant() >= fin + 300 && Date.now() - derniereTentative > 2000) {
       derniereTentative = Date.now();
-      avancerTour(pid, ctx.etat.tour, "chrono");
+      avancerTour(pid, ctx.etat.tour, "chrono", dureeTable());
     }
   }, 250);
 
@@ -243,7 +247,7 @@ export function entrerPartie(pid, user, { afficher, sortir, carnet }) {
     // Tout le monde est prêt : n'importe quel téléphone lance l'entrée.
     if (phase === "cartes") {
       const liste = Object.values(joueurs);
-      if (liste.length && liste.every((j) => j.pret)) uneFois(`debut:${manche}`, () => commencerTours(pid));
+      if (liste.length && liste.every((j) => j.pret)) uneFois(`debut:${manche}`, () => commencerTours(pid, dureeTable()));
     }
 
     if (!ctx.estHote) return;

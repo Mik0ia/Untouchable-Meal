@@ -3,6 +3,7 @@
 import { h } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { ouvrirMaCarte } from "../ui/carte.js";
+import { REGLES } from "../config/regles.js";
 
 /** Joueurs triés par ordre d'arrivée, avec leur uid. */
 export function listeJoueurs(joueurs) {
@@ -66,4 +67,12 @@ export function avertissementHote(ctx) {
     return h("p", { class: "avertissement" }, TEXTES.hoteParti);
   }
   return null;
+}
+
+/** Liste déroulante des durées de plat proposées. */
+export function choixDuree(id, valeur) {
+  const actuelle = Number(valeur) || REGLES.dureeTour;
+  const options = [...new Set([...REGLES.dureesProposees, actuelle])].sort((a, b) => a - b);
+  return h("select", { id },
+    options.map((s) => h("option", { value: s, selected: s === actuelle }, TEXTES.formatDuree(s))));
 }

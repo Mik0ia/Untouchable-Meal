@@ -1,8 +1,11 @@
 // Réglages du jeu. Modifie les valeurs ici, tout le reste s'adapte.
 
 export const REGLES = {
-  // Durée d'un tour, en secondes.
+  // Durée d'un tour par défaut, en secondes.
   dureeTour: 120,
+
+  // Durées proposées à l'hôte (en secondes), à la création et dans le salon.
+  dureesProposees: [60, 90, 120, 150, 180, 210],
 
   // Nom des tours, dans l'ordre. Le nombre de tours = nombre de noms.
   tours: ["Entrée", "Plat", "Dessert"],

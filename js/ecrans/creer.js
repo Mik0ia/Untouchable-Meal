@@ -5,6 +5,7 @@ import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
 import { COMPOSITIONS } from "../data/roles.js";
 import { creerPartie } from "../lobby.js";
+import { choixDuree } from "./commun.js";
 
 export function ecranCreer(user, { retour, versPartie }) {
   const tailles = Object.keys(COMPOSITIONS).map(Number)
@@ -18,6 +19,7 @@ export function ecranCreer(user, { retour, versPartie }) {
   });
   const choixMax = h("select", { id: "max-joueurs" },
     tailles.map((n) => h("option", { value: n, selected: n === maxDefaut }, String(n))));
+  const choixDureePlat = choixDuree("duree-plat", REGLES.dureeTour);
   const caseePrivee = h("input", { id: "privee", type: "checkbox", class: "interrupteur" });
   const caseServeur = h("input", { id: "serveur", type: "checkbox", class: "interrupteur", checked: true });
   const bouton = h("button", { class: "btn btn-plein", type: "submit" }, TEXTES.creerBouton);
@@ -27,6 +29,8 @@ export function ecranCreer(user, { retour, versPartie }) {
     champNom,
     h("label", { for: "max-joueurs" }, TEXTES.maxJoueurs),
     choixMax,
+    h("label", { for: "duree-plat" }, TEXTES.dureePlat),
+    choixDureePlat,
     h("div", { class: "ligne-interrupteur" },
       h("label", { for: "privee" }, TEXTES.privee, h("small", {}, TEXTES.priveeAide)),
       caseePrivee
@@ -43,7 +47,8 @@ export function ecranCreer(user, { retour, versPartie }) {
     bouton.disabled = true;
     try {
       const pid = await creerPartie(user, {
-        nom: champNom.value, max: choixMax.value, privee: caseePrivee.checked, serveur: caseServeur.checked
+        nom: champNom.value, max: choixMax.value, privee: caseePrivee.checked, serveur: caseServeur.checked,
+        duree: Number(choixDureePlat.value)
       });
       versPartie(pid);
     } catch (err) {

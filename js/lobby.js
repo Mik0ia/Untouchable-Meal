@@ -35,7 +35,7 @@ export function fiche(user) {
 }
 
 /** Crée une table et y installe l'hôte. Retourne l'identifiant de la partie. */
-export async function creerPartie(user, { nom, max, privee, serveur = true }) {
+export async function creerPartie(user, { nom, max, privee, serveur = true, duree = REGLES.dureeTour }) {
   const pid = nouvelId();
   const code = await nouveauCode();
   const maxJ = Math.max(REGLES.minJoueurs, Math.min(REGLES.maxJoueurs, Number(max) || REGLES.maxJoueurs));
@@ -43,7 +43,7 @@ export async function creerPartie(user, { nom, max, privee, serveur = true }) {
 
   const maj = {
     [`parties/${pid}/info`]: {
-      nom: nomTable, max: maxJ, privee: !!privee, serveur: !!serveur, code, hote: user.uid, creeLe: serverTimestamp()
+      nom: nomTable, max: maxJ, privee: !!privee, serveur: !!serveur, duree: Number(duree) || REGLES.dureeTour, code, hote: user.uid, creeLe: serverTimestamp()
     },
     [`parties/${pid}/etat`]: { phase: "salon", seq: 0, manche: 1 },
     [`parties/${pid}/joueurs/${user.uid}`]: fiche(user),
@@ -138,4 +138,9 @@ export function partieMemorisee(uid) {
 /** L'hôte active ou retire le serveur depuis le salon. */
 export function changerServeur(pid, avecServeur) {
   return set(r(`parties/${pid}/info/serveur`), !!avecServeur);
+}
+
+/** L'hôte change la durée d'un plat depuis le salon. */
+export function changerDuree(pid, secondes) {
+  return set(r(`parties/${pid}/info/duree`), Number(secondes) || REGLES.dureeTour);
 }

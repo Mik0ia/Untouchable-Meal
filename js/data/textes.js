@@ -22,6 +22,12 @@ export const TEXTES = {
   privee: "Table privée",
   priveeAide: "Invisible dans la liste. On la rejoint uniquement avec son code.",
   creerBouton: "Dresser la table",
+  dureePlat: "Durée de chaque plat",
+  formatDuree: (s) => {
+    const m = Math.floor(s / 60), r = s % 60;
+    return r ? `${m} min ${String(r).padStart(2, "0")}` : `${m} min`;
+  },
+  dureeAffichee: (txt) => `${txt} par plat`,
   avecServeur: "Avec le serveur",
   avecServeurAide: "Le serveur entre en jeu à partir de 6 convives. Sans lui, sa place revient à un autre rôle.",
   serveurOui: "Avec le serveur",

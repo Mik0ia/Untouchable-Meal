@@ -3,7 +3,7 @@
 import { h, vider, avatar, toast, filet } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
-import { listeJoueurs } from "./commun.js";
+import { listeJoueurs, choixDuree } from "./commun.js";
 
 export function ecranSalon(ctx) {
   const liste = h("ul", { class: "liste-convives" });
@@ -50,17 +50,23 @@ export function ecranSalon(ctx) {
       ));
     }
 
-    // Option du serveur : modifiable par l'hôte, visible par tous.
+    // Options : modifiables par l'hôte, visibles par tous.
     const avecServeur = c.info.serveur !== false;
+    const duree = Number(c.info.duree) || REGLES.dureeTour;
     vider(zoneServeur);
     if (c.estHote) {
+      const sel = choixDuree("salon-duree", duree);
+      sel.addEventListener("change", () => c.act.changerDuree(Number(sel.value)));
+      zoneServeur.append(h("div", { class: "ligne-option" },
+        h("label", { for: "salon-duree" }, TEXTES.dureePlat), sel));
       const inter = h("input", { id: "salon-serveur", type: "checkbox", class: "interrupteur", checked: avecServeur });
       inter.addEventListener("change", () => c.act.changerServeur(inter.checked));
       zoneServeur.append(h("div", { class: "ligne-interrupteur" },
         h("label", { for: "salon-serveur" }, TEXTES.avecServeur, h("small", {}, TEXTES.avecServeurAide)),
         inter));
     } else {
-      zoneServeur.append(h("p", { class: "aide" }, avecServeur ? TEXTES.serveurOui : TEXTES.serveurNon));
+      zoneServeur.append(h("p", { class: "aide" },
+        TEXTES.dureeAffichee(TEXTES.formatDuree(duree)), " · ", avecServeur ? TEXTES.serveurOui : TEXTES.serveurNon));
     }
 
     vider(zoneAction);

@@ -183,7 +183,10 @@ body.avec-carnet .ecran { padding-bottom: calc(5rem + env(safe-area-inset-bottom
 
 /* ---------- Option du salon ---------- */
 .option-salon { width: 100%; text-align: left; }
+.option-salon { display: flex; flex-direction: column; gap: 0.9rem; }
 .option-salon .ligne-interrupteur { margin-top: 0; }
+.ligne-option { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.ligne-option select { width: auto; min-width: 8.5rem; padding-right: 1.6rem; }
 .option-salon .aide { text-align: center; max-width: none; }
 
 /* ---------- Création ---------- */
