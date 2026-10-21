@@ -6,32 +6,45 @@
 
 export const CATEGORIES = {
   "Lieux mafia": [
-    "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle"
+    "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle", "Restaurant", "Cinéma"
   ],
   "Lieux police": [
-    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Interrogatoire",
-    "Bureau", "Archives", "Infirmerie"
+    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Bureau", "Archives", "Infirmerie"
   ],
-  "Activités": [
-    "Contrebande", "Racket", "Arrestation", "Blanchiment", "Chantage",
-    "Poursuite", "Traquenard", "Kidnapping"
+  "Activités Mafia": [
+    "Contrebande", "Racket", "Blanchiment", "Chantage", "Poursuite", "Traquenard", "Kidnapping", "Dealer", "Assassinat", "Intimidation", "Corruption"
   ],
-  "Objets": [
-    "Cigare", "Bouteille", "Bague", "Billets", "Caisse", "Sacs",
-    "Jukebox", "Tonneau"
+  "Activités Police": [
+    "Arrestation", "Raid", "Interrogatoire", "Poursuite", "Enquête", "Contrôle", "Juger"
   ],
-  "Armes": [
-    "Thompson", "Revolver", "Couteau", "Matraque", "Fusil", "Batte",
-    "Dynamite", "Corde"
+  "Contenant": [
+    "Bouteille", "Caisse", "Sacs", "Tonneau", "Coffre", "Carton", "Mallette"
+  ],
+  "Marchandise": [
+    "Billets", "Lingot", "Alcool", "Tabac", "Parfums", "Bijoux",
+  ],
+  "Bijoux": [
+    "Bague", "Montre", "Collier", "Chevalière", "Broche", "Chapelet"
+  ],
+    "Drogue": [
+    "Cigare", "Cigarette", "Pipe", "Opium", "Morphine", "Cocaïne", "Héroïne"
+  ],
+  "Armes Blanche": [
+    "Couteau", "Matraque", "Batte", "Corde", "Hache"
+  ],
+  "Armes à feu": [
+    "Mitraillette", "Fusil à pompe", "Fusil", "Pistolet", "Silencieux"
   ],
   "Moyens de transport": [
-    "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi"
+    "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi", "Wagon", "Cheval"
   ],
   "Principes moraux": [
-    "Corruption", "Loyauté", "Vengeance", "Trahison", "Intimidation",
-    "Respect", "Omerta", "Justice"
+    "Corruption", "Loyauté", "Vengeance", "Trahison", "Respect", "Justice"
   ],
-  "Alimentaire": [
-    "Whisky", "Bière", "Caviar", "Rôti", "Sandwich", "Café", "Poisson", "Pain"
+  "Boisson": [
+    "Whisky", "Bière","Café", "Vin", "Rhum", "Coca", "Eau", "Liqueur"
+  ],
+  "Nourriture": [
+    "Caviar", "Rôti", "Sandwich", "Poisson", "Pain", "Steak", "Salade",
   ]
 };
