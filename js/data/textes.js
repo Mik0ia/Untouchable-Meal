@@ -71,6 +71,7 @@ export const TEXTES = {
   souleverCloche: "Fais glisser la cloche pour découvrir ton mot",
   categorie: "Catégorie du mot",
   tonMot: "Ton mot",
+  motDesAcolytes: "Mot des acolytes",
   sonner: "Sonne pour passer au plat suivant",
   sonnerDernier: "Sonne pour finir le repas",
   capone: "Écoute bien tes acolytes.",

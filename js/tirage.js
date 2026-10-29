@@ -75,6 +75,8 @@ export function preparerPartie(uids, { avecServeur = true } = {}) {
     else if (role === POLICIER) indices = categories;
     else if (role === CAPONE) indices = [];
     secrets[uid] = { role, indices };
+    // Le traître connaît aussi le mot des acolytes (affiché en petit sous le sien).
+    if (role === TRAITRE) secrets[uid].motsAcolytes = motsAcolytes;
   });
 
   // Le serveur choisit à chaque plat chez qui regarder : son téléphone connaît

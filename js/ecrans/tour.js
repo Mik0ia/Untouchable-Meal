@@ -5,7 +5,7 @@
 import { h, vider, avatar } from "../ui/dom.js";
 import { TEXTES } from "../data/textes.js";
 import { REGLES } from "../config/regles.js";
-import { CAPONE, POLICIER, SERVEUR } from "../data/roles.js";
+import { CAPONE, POLICIER, SERVEUR, TRAITRE } from "../data/roles.js";
 import { creerAssiette } from "../ui/assiette.js";
 import { creerCloche } from "../ui/cloche.js";
 import { creerSonnette } from "../ui/sonnette.js";
@@ -113,9 +113,13 @@ export function ecranTour(ctx) {
   } else {
     const estPolicier = role === POLICIER;
     const valeur = (ctx.secret.indices || [])[tour] || "—";
+    const motAcolytes = role === TRAITRE ? (ctx.secret.motsAcolytes || [])[tour] : null;
     const dessous = h("div", { class: "mot-cache" },
       h("span", { class: "mot-etiquette" }, estPolicier ? TEXTES.categorie : TEXTES.tonMot),
-      h("span", { class: `mot ${estPolicier ? "mot-categorie" : ""}` }, valeur)
+      h("span", { class: `mot ${estPolicier ? "mot-categorie" : ""}` }, valeur),
+      motAcolytes ? h("span", { class: "mot-secondaire" },
+        h("span", { class: "mot-secondaire-etiquette" }, TEXTES.motDesAcolytes),
+        h("span", { class: "mot-secondaire-valeur" }, motAcolytes)) : null
     );
     assiette.contenu.append(creerCloche(dessous, () => { aide.classList.add("estompe"); }));
     aide.textContent = TEXTES.souleverCloche;

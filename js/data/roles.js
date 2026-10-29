@@ -36,7 +36,8 @@ export const ROLES = {
     nom: "Traître",
     carte: "ressources/cartes/traitre.webp",
     objectif:
-      "Ton mot est de la même catégorie que celui des acolytes. Glisse-le dans la " +
+      "Ton mot est de la même catégorie que celui des acolytes, que tu connais aussi " +
+      "(en petit sous le tien). Glisse ton mot dans la " +
       "conversation : chaque fois qu'Al Capone ou le policier l'écrit, tu marques " +
       "un point. Autant de points qu'Al Capone et plus que le policier, et ton équipe " +
       "de traîtres gagne, même si tu as été éliminé."
