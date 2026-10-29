@@ -9,7 +9,7 @@ export const CATEGORIES = {
     "Planque", "Hôtel", "Bar", "Distillerie", "Casino", "Cabaret", "Ruelle", "Restaurant", "Cinéma"
   ],
   "Lieux police": [
-    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Bureau", "Archives", "Infirmerie"
+    "Commissariat", "Tribunal", "Cellule", "Armurerie", "Bureau", "Archives", "Infirmerie", "Détention", "Archives"
   ],
   "Activités Mafia": [
     "Contrebande", "Racket", "Blanchiment", "Chantage", "Poursuite", "Traquenard", "Kidnapping", "Dealer", "Assassinat", "Intimidation", "Corruption"
@@ -26,25 +26,40 @@ export const CATEGORIES = {
   "Bijoux": [
     "Bague", "Montre", "Collier", "Chevalière", "Broche", "Chapelet"
   ],
-    "Drogue": [
+  "Drogue": [
     "Cigare", "Cigarette", "Pipe", "Opium", "Morphine", "Cocaïne", "Héroïne"
   ],
   "Armes Blanche": [
     "Couteau", "Matraque", "Batte", "Corde", "Hache"
   ],
   "Armes à feu": [
-    "Mitraillette", "Fusil à pompe", "Fusil", "Pistolet", "Silencieux"
+    "Mitraillette", "Fusil à pompe", "Fusil", "Pistolet"
   ],
   "Moyens de transport": [
-    "Ford", "Train", "Bateau", "Calèche", "Moto", "Wagon", "Camion", "Taxi", "Wagon", "Cheval"
+    "Voiture", "Train", "Bateau", "Moto", "Wagon", "Camion", "Taxi", "Cheval"
   ],
   "Principes moraux": [
     "Corruption", "Loyauté", "Vengeance", "Trahison", "Respect", "Justice"
   ],
-  "Boisson": [
-    "Whisky", "Bière","Café", "Vin", "Rhum", "Coca", "Eau", "Liqueur"
+  "Boissons chaudes": [
+    "Café", "Thé", "Chocolat chaud", "Vin chaud"
   ],
-  "Nourriture": [
-    "Caviar", "Rôti", "Sandwich", "Poisson", "Pain", "Steak", "Salade",
+  "Boissons Froides": [
+    "Coca", "Jus de fruit", "Eau plate", "Eau pétillante", "Sirop", "Limonade"
+  ],
+  "Alcool": [
+    "Whisky", "Bière", "Vin", "Rhum", "Pastis"
+  ],
+  "Viande": [
+    "Rôti", "Steak", "Agneau", "Filet mignon", "Entrecôte", "Bavette"
+  ],
+  "Plat Froid": [
+    "Sandwich", "Salade", "Tartare", "Jambon", "Quiche", "Velouté"
+  ],
+  "Fruits":[
+    "Avocat", "Orange", "Pomme", "Poire", "Banane", "Pêche"
+  ],
+  "Poisson" : [
+    "Truite", "Saumon", "Caviar", "Sardine", "Thon", "Cabillaud"
   ]
 };
